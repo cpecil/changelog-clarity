@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Changelog</title>
+    <description>The latest updates and improvements</description>
+    <link>https://example.com/changelog</link>
+    <atom:link href="https://example.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>Wed, 15 Jan 2026 10:00:00 GMT</lastBuildDate>
+    <item>
+      <title>v2.1 - Improved response quality and reduced latency</title>
+      <link>https://example.com/changelog#v2.1</link>
+      <pubDate>Wed, 15 Jan 2026 10:00:00 GMT</pubDate>
+      <guid>https://example.com/changelog#v2.1</guid>
+      <description>Enhanced context understanding for longer conversations. Reduced average response time by 40%. Resolved edge cases in code generation.</description>
+    </item>
+    <item>
+      <title>v2.0 - Major architecture update with new capabilities</title>
+      <link>https://example.com/changelog#v2.0</link>
+      <pubDate>Fri, 10 Jan 2026 10:00:00 GMT</pubDate>
+      <guid>https://example.com/changelog#v2.0</guid>
+      <description>Support for multimodal inputs. Extended context window to 128k tokens. More natural conversational flow. Memory optimization for large documents.</description>
+    </item>
+  </channel>
+</rss>
