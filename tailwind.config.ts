@@ -14,9 +14,41 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Poppins", "system-ui", "sans-serif"],
+        sans: ["Roboto FlexVariable", "system-ui", "sans-serif"],
       },
       colors: {
+        // M3 System Colors
+        "md-primary": "hsl(var(--md-sys-color-primary))",
+        "md-on-primary": "hsl(var(--md-sys-color-on-primary))",
+        "md-primary-container": "hsl(var(--md-sys-color-primary-container))",
+        "md-on-primary-container": "hsl(var(--md-sys-color-on-primary-container))",
+        "md-secondary": "hsl(var(--md-sys-color-secondary))",
+        "md-on-secondary": "hsl(var(--md-sys-color-on-secondary))",
+        "md-secondary-container": "hsl(var(--md-sys-color-secondary-container))",
+        "md-on-secondary-container": "hsl(var(--md-sys-color-on-secondary-container))",
+        "md-tertiary": "hsl(var(--md-sys-color-tertiary))",
+        "md-on-tertiary": "hsl(var(--md-sys-color-on-tertiary))",
+        "md-tertiary-container": "hsl(var(--md-sys-color-tertiary-container))",
+        "md-on-tertiary-container": "hsl(var(--md-sys-color-on-tertiary-container))",
+        "md-error": "hsl(var(--md-sys-color-error))",
+        "md-on-error": "hsl(var(--md-sys-color-on-error))",
+        "md-surface": "hsl(var(--md-sys-color-surface))",
+        "md-on-surface": "hsl(var(--md-sys-color-on-surface))",
+        "md-surface-variant": "hsl(var(--md-sys-color-surface-variant))",
+        "md-on-surface-variant": "hsl(var(--md-sys-color-on-surface-variant))",
+        "md-surface-container": "hsl(var(--md-sys-color-surface-container))",
+        "md-surface-container-high": "hsl(var(--md-sys-color-surface-container-high))",
+        "md-surface-container-highest": "hsl(var(--md-sys-color-surface-container-highest))",
+        "md-surface-container-low": "hsl(var(--md-sys-color-surface-container-low))",
+        "md-outline": "hsl(var(--md-sys-color-outline))",
+        "md-outline-variant": "hsl(var(--md-sys-color-outline-variant))",
+        // Status colors
+        status: {
+          planned: "hsl(var(--status-planned))",
+          rolling: "hsl(var(--status-rolling))",
+          complete: "hsl(var(--status-complete))",
+        },
+        // Semantic shadcn compatibility
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -50,11 +82,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        status: {
-          planned: "hsl(var(--status-planned))",
-          rolling: "hsl(var(--status-rolling))",
-          complete: "hsl(var(--status-complete))",
-        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -70,6 +97,11 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "m3-small": "var(--md-sys-shape-corner-small)",
+        "m3-medium": "var(--md-sys-shape-corner-medium)",
+        "m3-large": "var(--md-sys-shape-corner-large)",
+        "m3-xl": "var(--md-sys-shape-corner-extra-large)",
+        "m3-full": "var(--md-sys-shape-corner-full)",
       },
       keyframes: {
         "accordion-down": {
@@ -81,14 +113,28 @@ export default {
           to: { height: "0" },
         },
         "fade-in": {
-          from: { opacity: "0", transform: "translateY(8px)" },
+          from: { opacity: "0", transform: "translateY(12px)" },
           to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "slide-in-right": {
+          from: { transform: "translateX(100%)" },
+          to: { transform: "translateX(0)" },
+        },
+        "scale-in": {
+          from: { opacity: "0", transform: "scale(0.9)" },
+          to: { opacity: "1", transform: "scale(1)" },
+        },
+        "ripple": {
+          to: { transform: "scale(4)", opacity: "0" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.4s ease-out forwards",
+        "fade-in": "fade-in 0.4s cubic-bezier(0.2, 0, 0, 1) forwards",
+        "slide-in-right": "slide-in-right 0.3s cubic-bezier(0.2, 0, 0, 1)",
+        "scale-in": "scale-in 0.3s cubic-bezier(0.2, 0, 0, 1)",
+        "ripple": "ripple 0.6s linear",
       },
     },
   },
