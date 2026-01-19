@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { ExternalLink, ChevronRight } from "lucide-react";
 import { ChangelogEntry, ChangeType } from "@/types/changelog";
 import { StatusChip } from "./StatusChip";
+import { MaterialIcon } from "./MaterialIcon";
 import { cn } from "@/lib/utils";
 
 interface ChangelogCardProps {
@@ -10,16 +10,10 @@ interface ChangelogCardProps {
   onClick?: () => void;
 }
 
-const typeColors: Record<ChangeType, string> = {
-  Added: "text-status-complete",
-  Improved: "text-md-primary",
-  Fixed: "text-status-planned",
-};
-
-const typeLabels: Record<ChangeType, string> = {
-  Added: "New",
-  Improved: "Improved",
-  Fixed: "Fixed",
+const typeConfig: Record<ChangeType, { icon: string; color: string; label: string }> = {
+  Added: { icon: "add_circle", color: "text-status-complete", label: "New" },
+  Improved: { icon: "arrow_upward", color: "text-md-primary", label: "Improved" },
+  Fixed: { icon: "build", color: "text-status-planned", label: "Fixed" },
 };
 
 export function ChangelogCard({ entry, index, onClick }: ChangelogCardProps) {
@@ -38,7 +32,7 @@ export function ChangelogCard({ entry, index, onClick }: ChangelogCardProps) {
         delay: index * 0.08,
         ease: [0.2, 0, 0, 1],
       }}
-      className="md-card-elevated overflow-hidden cursor-pointer group"
+      className="md-card-elevated overflow-hidden group"
       onClick={onClick}
     >
       {/* Progress bar */}
@@ -78,48 +72,47 @@ export function ChangelogCard({ entry, index, onClick }: ChangelogCardProps) {
 
         {/* Changes list */}
         <ul className="space-y-3 mb-4">
-          {entry.changes.slice(0, 3).map((change, i) => (
-            <li key={i} className="flex items-start gap-3">
-              <span
-                className={cn(
-                  "label-small px-2 py-0.5 rounded-m3-small bg-md-surface-container-high flex-shrink-0 mt-0.5",
-                  typeColors[change.type]
-                )}
-              >
-                {typeLabels[change.type]}
-              </span>
-              <span className="body-medium text-md-on-surface-variant">
-                {change.text}
-              </span>
-            </li>
-          ))}
+          {entry.changes.slice(0, 3).map((change, i) => {
+            const config = typeConfig[change.type];
+            return (
+              <li key={i} className="flex items-start gap-3">
+                <MaterialIcon
+                  name={config.icon}
+                  size="small"
+                  className={cn("flex-shrink-0 mt-0.5", config.color)}
+                />
+                <span className="body-medium text-md-on-surface-variant">
+                  {change.text}
+                </span>
+              </li>
+            );
+          })}
           {entry.changes.length > 3 && (
-            <li className="body-medium text-md-on-surface-variant pl-1">
-              +{entry.changes.length - 3} more changes
+            <li className="flex items-center gap-3 body-medium text-md-on-surface-variant">
+              <MaterialIcon name="more_horiz" size="small" className="text-md-on-surface-variant" />
+              <span>+{entry.changes.length - 3} more changes</span>
             </li>
           )}
         </ul>
 
         {/* Footer with links */}
-        <div className="flex items-center justify-between pt-4 border-t border-md-outline-variant">
-          <div className="flex gap-3">
-            {entry.links?.slice(0, 2).map((link, i) => (
+        {entry.links && entry.links.length > 0 && (
+          <div className="flex items-center gap-4 pt-4 border-t border-md-outline-variant">
+            {entry.links.slice(0, 2).map((link, i) => (
               <a
                 key={i}
                 href={link.url}
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-1.5 label-large text-md-primary hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {link.label}
-                <ExternalLink className="w-4 h-4" />
+                <MaterialIcon name="open_in_new" size="small" />
               </a>
             ))}
           </div>
-          <div className="flex items-center gap-1 text-md-primary label-large opacity-0 group-hover:opacity-100 transition-opacity">
-            View details
-            <ChevronRight className="w-4 h-4" />
-          </div>
-        </div>
+        )}
       </div>
     </motion.article>
   );

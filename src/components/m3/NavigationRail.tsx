@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FileText, Bell, Settings, Download, Rss } from "lucide-react";
+import { MaterialIcon } from "./MaterialIcon";
 import { cn } from "@/lib/utils";
 
 interface NavigationRailProps {
@@ -8,10 +8,8 @@ interface NavigationRailProps {
 }
 
 const navItems = [
-  { id: "changelog", label: "Updates", icon: FileText },
-  { id: "subscribe", label: "Subscribe", icon: Bell },
-  { id: "export", label: "Export", icon: Download },
-  { id: "settings", label: "Settings", icon: Settings },
+  { id: "changelog", label: "Updates", icon: "article" },
+  { id: "subscribe", label: "Subscribe", icon: "notifications" },
 ];
 
 export function NavigationRail({ activeTab, onTabChange }: NavigationRailProps) {
@@ -20,30 +18,13 @@ export function NavigationRail({ activeTab, onTabChange }: NavigationRailProps) 
       {/* Logo area */}
       <div className="py-4 px-3">
         <div className="w-12 h-12 rounded-m3-large bg-md-primary-container flex items-center justify-center">
-          <Rss className="w-6 h-6 text-md-on-primary-container" />
+          <MaterialIcon name="rss_feed" className="text-md-on-primary-container" />
         </div>
       </div>
 
-      {/* FAB area */}
-      <div className="py-4 px-3">
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="md-fab"
-          aria-label="New entry"
-          onClick={() => onTabChange("editor")}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-        </motion.button>
-      </div>
-
       {/* Navigation items */}
-      <div className="flex-1 flex flex-col items-center gap-1 py-4">
+      <div className="flex-1 flex flex-col items-center gap-1 py-4 mt-4">
         {navItems.map((item) => {
-          const Icon = item.icon;
           const isActive = activeTab === item.id;
 
           return (
@@ -63,7 +44,11 @@ export function NavigationRail({ activeTab, onTabChange }: NavigationRailProps) 
                 }}
                 transition={{ duration: 0.2 }}
               >
-                <Icon className="w-5 h-5" />
+                <MaterialIcon 
+                  name={item.icon} 
+                  filled={isActive}
+                  className={isActive ? "text-md-on-secondary-container" : "text-md-on-surface-variant"}
+                />
               </motion.div>
               <span className={cn(
                 "label-medium",
