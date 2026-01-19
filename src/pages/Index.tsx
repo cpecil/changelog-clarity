@@ -1,36 +1,26 @@
 import { useState, useMemo, useEffect } from "react";
-import { Header } from "@/components/changelog/Header";
-import { Footer } from "@/components/changelog/Footer";
-import { ChangelogEntry } from "@/components/changelog/ChangelogEntry";
-import { FilterBar } from "@/components/changelog/FilterBar";
-import { SubscribeForm } from "@/components/changelog/SubscribeForm";
-import { MarkdownEditor } from "@/components/changelog/MarkdownEditor";
+import { AnimatePresence } from "framer-motion";
+import { NavigationRail } from "@/components/m3/NavigationRail";
+import { TopAppBar } from "@/components/m3/TopAppBar";
+import { BottomNavigation } from "@/components/m3/BottomNavigation";
+import { FAB } from "@/components/m3/FAB";
+import { ChangelogCard } from "@/components/m3/ChangelogCard";
+import { FilterChips } from "@/components/m3/FilterChips";
+import { SubscribePanel } from "@/components/m3/SubscribePanel";
+import { EditorPanel } from "@/components/m3/EditorPanel";
+import { ExportPanel } from "@/components/m3/ExportPanel";
+import { SettingsPanel } from "@/components/m3/SettingsPanel";
 import { changelogEntries } from "@/data/changelog-data";
-import { Edit3, X } from "lucide-react";
 
 const Index = () => {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
+  const [activeTab, setActiveTab] = useState("changelog");
   const [selectedVersion, setSelectedVersion] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [showEditor, setShowEditor] = useState(false);
-  const [editorContent, setEditorContent] = useState(
-    `## v1.5
-
-**Summary:** New features and improvements
-
-### Changes
-
-- **Add** custom themes support
-- **Improve** performance for large datasets
-- **Fix** navigation on mobile devices`
-  );
 
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.remove("light");
-    } else {
-      document.documentElement.classList.add("light");
-    }
+    document.documentElement.classList.toggle("dark", isDark);
   }, [isDark]);
 
   const versions = useMemo(
@@ -46,79 +36,88 @@ const Index = () => {
     });
   }, [selectedVersion, selectedStatus]);
 
-  return (
-    <div className="min-h-screen bg-background">
-      <Header isDark={isDark} onToggleTheme={() => setIsDark(!isDark)} />
+  const renderContent = () => {
+    if (showEditor) {
+      return <EditorPanel onClose={() => setShowEditor(false)} />;
+    }
 
-      <main className="container-changelog py-8 md:py-12 lg:py-16">
-        {/* Hero Section */}
-        <section className="mb-12 md:mb-16">
-          <h2 className="mb-3 text-2xl font-medium md:text-3xl lg:text-4xl">
-            What's new
-          </h2>
-          <p className="mb-6 max-w-xl text-muted-foreground">
-            The latest updates and improvements. Subscribe to stay informed.
-          </p>
-          <SubscribeForm />
-        </section>
+    switch (activeTab) {
+      case "subscribe":
+        return <SubscribePanel />;
+      case "export":
+        return <ExportPanel />;
+      case "settings":
+        return <SettingsPanel isDark={isDark} onToggleTheme={() => setIsDark(!isDark)} />;
+      default:
+        return (
+          <div className="max-w-3xl mx-auto py-6 md:py-8 px-4 md:px-6">
+            {/* Hero */}
+            <header className="mb-8">
+              <h2 className="display-small text-md-on-surface mb-2">What's new</h2>
+              <p className="body-large text-md-on-surface-variant">
+                Track all updates, improvements, and fixes
+              </p>
+            </header>
 
-        {/* Editor Toggle */}
-        <div className="mb-8 flex items-center justify-between">
-          <FilterBar
-            versions={versions}
-            selectedVersion={selectedVersion}
-            selectedStatus={selectedStatus}
-            onVersionChange={setSelectedVersion}
-            onStatusChange={setSelectedStatus}
-          />
-          
-          <button
-            onClick={() => setShowEditor(!showEditor)}
-            className="btn-translucent flex items-center gap-2"
-          >
-            {showEditor ? (
-              <>
-                <X className="h-4 w-4" />
-                <span className="hidden sm:inline">Close</span>
-              </>
-            ) : (
-              <>
-                <Edit3 className="h-4 w-4" />
-                <span className="hidden sm:inline">New entry</span>
-              </>
-            )}
-          </button>
-        </div>
-
-        {/* Markdown Editor Panel */}
-        {showEditor && (
-          <section className="mb-8 animate-fade-in">
-            <MarkdownEditor
-              value={editorContent}
-              onChange={setEditorContent}
-              placeholder="Write your changelog entry in Markdown..."
-            />
-            <div className="mt-3 flex justify-end">
-              <button className="btn-translucent">Save draft</button>
+            {/* Filters */}
+            <div className="mb-6">
+              <FilterChips
+                versions={versions}
+                selectedVersion={selectedVersion}
+                selectedStatus={selectedStatus}
+                onVersionChange={setSelectedVersion}
+                onStatusChange={setSelectedStatus}
+              />
             </div>
-          </section>
+
+            {/* Changelog grid */}
+            <div className="space-y-4">
+              {filteredEntries.length > 0 ? (
+                filteredEntries.map((entry, index) => (
+                  <ChangelogCard key={entry.id} entry={entry} index={index} />
+                ))
+              ) : (
+                <div className="md-card-outlined p-12 text-center">
+                  <p className="body-large text-md-on-surface-variant">
+                    No entries match your filters
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="app-shell bg-md-surface min-h-screen">
+      {/* Navigation Rail - Desktop */}
+      <NavigationRail activeTab={activeTab} onTabChange={setActiveTab} />
+
+      {/* Main content */}
+      <div className="app-main pb-24 md:pb-0">
+        <TopAppBar
+          title="Changelog"
+          isDark={isDark}
+          onToggleTheme={() => setIsDark(!isDark)}
+        />
+
+        <main className="flex-1">
+          <AnimatePresence mode="wait">
+            {renderContent()}
+          </AnimatePresence>
+        </main>
+
+        {/* FAB - Mobile only for changelog tab */}
+        {activeTab === "changelog" && !showEditor && (
+          <div className="fixed right-4 bottom-24 md:hidden z-40">
+            <FAB onClick={() => setShowEditor(true)} label="New entry" />
+          </div>
         )}
+      </div>
 
-        {/* Changelog Entries */}
-        <section>
-          {filteredEntries.length > 0 ? (
-            filteredEntries.map((entry, index) => (
-              <ChangelogEntry key={entry.id} entry={entry} index={index} />
-            ))
-          ) : (
-            <p className="py-12 text-center text-muted-foreground">
-              No entries match your filters
-            </p>
-          )}
-        </section>
-      </main>
-
-      <Footer />
+      {/* Bottom Navigation - Mobile */}
+      <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   );
 };
