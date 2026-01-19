@@ -3,13 +3,10 @@ import { AnimatePresence } from "framer-motion";
 import { NavigationRail } from "@/components/m3/NavigationRail";
 import { TopAppBar } from "@/components/m3/TopAppBar";
 import { BottomNavigation } from "@/components/m3/BottomNavigation";
-import { FAB } from "@/components/m3/FAB";
 import { ChangelogCard } from "@/components/m3/ChangelogCard";
 import { FilterChips } from "@/components/m3/FilterChips";
 import { SubscribePanel } from "@/components/m3/SubscribePanel";
-import { EditorPanel } from "@/components/m3/EditorPanel";
-import { ExportPanel } from "@/components/m3/ExportPanel";
-import { SettingsPanel } from "@/components/m3/SettingsPanel";
+import { SearchDialog } from "@/components/m3/SearchDialog";
 import { changelogEntries } from "@/data/changelog-data";
 
 const Index = () => {
@@ -17,11 +14,24 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("changelog");
   const [selectedVersion, setSelectedVersion] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
-  const [showEditor, setShowEditor] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark);
   }, [isDark]);
+
+  // Global keyboard shortcut for search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const versions = useMemo(
     () => [...new Set(changelogEntries.map((e) => e.version))],
@@ -37,17 +47,9 @@ const Index = () => {
   }, [selectedVersion, selectedStatus]);
 
   const renderContent = () => {
-    if (showEditor) {
-      return <EditorPanel onClose={() => setShowEditor(false)} />;
-    }
-
     switch (activeTab) {
       case "subscribe":
         return <SubscribePanel />;
-      case "export":
-        return <ExportPanel />;
-      case "settings":
-        return <SettingsPanel isDark={isDark} onToggleTheme={() => setIsDark(!isDark)} />;
       default:
         return (
           <div className="max-w-3xl mx-auto py-6 md:py-8 px-4 md:px-6">
@@ -100,6 +102,7 @@ const Index = () => {
           title="Changelog"
           isDark={isDark}
           onToggleTheme={() => setIsDark(!isDark)}
+          onSearchClick={() => setIsSearchOpen(true)}
         />
 
         <main className="flex-1">
@@ -107,17 +110,17 @@ const Index = () => {
             {renderContent()}
           </AnimatePresence>
         </main>
-
-        {/* FAB - Mobile only for changelog tab */}
-        {activeTab === "changelog" && !showEditor && (
-          <div className="fixed right-4 bottom-24 md:hidden z-40">
-            <FAB onClick={() => setShowEditor(true)} label="New entry" />
-          </div>
-        )}
       </div>
 
       {/* Bottom Navigation - Mobile */}
       <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+
+      {/* Search Dialog */}
+      <SearchDialog
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        entries={changelogEntries}
+      />
     </div>
   );
 };

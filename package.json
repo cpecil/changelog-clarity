@@ -13,6 +13,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@fontsource-variable/material-symbols-outlined": "^5.2.32",
     "@fontsource/poppins": "^5.2.7",
     "@fontsource/roboto-flex": "^5.2.8",
     "@hookform/resolvers": "^3.10.0",

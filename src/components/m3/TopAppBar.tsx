@@ -1,13 +1,10 @@
 import { motion } from "framer-motion";
-import { Menu, Moon, Sun, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { MaterialIcon } from "./MaterialIcon";
 
 interface TopAppBarProps {
   title: string;
   isDark: boolean;
   onToggleTheme: () => void;
-  onMenuClick?: () => void;
-  showSearch?: boolean;
   onSearchClick?: () => void;
 }
 
@@ -15,8 +12,6 @@ export function TopAppBar({
   title,
   isDark,
   onToggleTheme,
-  onMenuClick,
-  showSearch = true,
   onSearchClick,
 }: TopAppBarProps) {
   return (
@@ -24,46 +19,41 @@ export function TopAppBar({
       <div className="flex items-center justify-between h-16 px-4 md:px-6">
         {/* Left section */}
         <div className="flex items-center gap-4">
-          {onMenuClick && (
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={onMenuClick}
-              className="md:hidden w-10 h-10 flex items-center justify-center rounded-m3-full hover:bg-md-on-surface/[0.08]"
-              aria-label="Menu"
-            >
-              <Menu className="w-6 h-6 text-md-on-surface" />
-            </motion.button>
-          )}
+          {/* Mobile logo */}
+          <div className="md:hidden w-10 h-10 rounded-m3-medium bg-md-primary-container flex items-center justify-center">
+            <MaterialIcon name="rss_feed" className="text-md-on-primary-container" size="small" />
+          </div>
           <h1 className="title-large text-md-on-surface">{title}</h1>
         </div>
 
         {/* Right section */}
-        <div className="flex items-center gap-2">
-          {showSearch && (
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={onSearchClick}
-              className="w-10 h-10 flex items-center justify-center rounded-m3-full hover:bg-md-on-surface/[0.08]"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5 text-md-on-surface-variant" />
-            </motion.button>
-          )}
-
+        <div className="flex items-center gap-1">
+          {/* Search button */}
           <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={onSearchClick}
+            className="w-10 h-10 flex items-center justify-center rounded-m3-full hover:bg-md-on-surface/[0.08] relative group"
+            aria-label="Search (⌘K)"
+          >
+            <MaterialIcon name="search" className="text-md-on-surface-variant" />
+            <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-md-inverse-surface text-md-inverse-on-surface label-small opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+              ⌘K
+            </span>
+          </motion.button>
+
+          {/* Theme toggle */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={onToggleTheme}
             className="w-10 h-10 flex items-center justify-center rounded-m3-full hover:bg-md-on-surface/[0.08]"
             aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           >
-            {isDark ? (
-              <Sun className="w-5 h-5 text-md-on-surface-variant" />
-            ) : (
-              <Moon className="w-5 h-5 text-md-on-surface-variant" />
-            )}
+            <MaterialIcon 
+              name={isDark ? "light_mode" : "dark_mode"} 
+              className="text-md-on-surface-variant" 
+            />
           </motion.button>
         </div>
       </div>
