@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { MaterialIcon } from "./MaterialIcon";
+import { Search, Sun, Moon, Rss } from "lucide-react";
+import { LucideIcon } from "./LucideIcon";
 
 interface TopAppBarProps {
   title: string;
@@ -21,7 +22,7 @@ export function TopAppBar({
         <div className="flex items-center gap-4">
           {/* Mobile logo */}
           <div className="md:hidden w-10 h-10 rounded-m3-medium bg-md-primary-container flex items-center justify-center">
-            <MaterialIcon name="rss_feed" className="text-md-on-primary-container" size="small" />
+            <LucideIcon icon={Rss} className="text-md-on-primary-container" size="small" />
           </div>
           <h1 className="title-large text-md-on-surface">{title}</h1>
         </div>
@@ -36,7 +37,7 @@ export function TopAppBar({
             className="w-10 h-10 flex items-center justify-center rounded-m3-full hover:bg-md-on-surface/[0.08] relative group"
             aria-label="Search (⌘K)"
           >
-            <MaterialIcon name="search" className="text-md-on-surface-variant" />
+            <LucideIcon icon={Search} className="text-md-on-surface-variant" />
             <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-md-inverse-surface text-md-inverse-on-surface label-small opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
               ⌘K
             </span>
@@ -50,8 +51,8 @@ export function TopAppBar({
             className="w-10 h-10 flex items-center justify-center rounded-m3-full hover:bg-md-on-surface/[0.08]"
             aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           >
-            <MaterialIcon 
-              name={isDark ? "light_mode" : "dark_mode"} 
+            <LucideIcon 
+              icon={isDark ? Sun : Moon} 
               className="text-md-on-surface-variant" 
             />
           </motion.button>

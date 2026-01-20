@@ -1,15 +1,18 @@
 import { motion } from "framer-motion";
-import { MaterialIcon } from "./MaterialIcon";
+import { AlertCircle, Bell, Scale, Rss } from "lucide-react";
+import { LucideIcon } from "./LucideIcon";
 import { cn } from "@/lib/utils";
+import type { LucideIcon as LucideIconType } from "lucide-react";
 
 interface NavigationRailProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
 }
 
-const navItems = [
-  { id: "changelog", label: "Updates", icon: "article" },
-  { id: "subscribe", label: "Subscribe", icon: "notifications" },
+const navItems: { id: string; label: string; icon: LucideIconType }[] = [
+  { id: "alerts", label: "Alerts", icon: AlertCircle },
+  { id: "notifications", label: "Notifications", icon: Bell },
+  { id: "legal", label: "Legal", icon: Scale },
 ];
 
 export function NavigationRail({ activeTab, onTabChange }: NavigationRailProps) {
@@ -18,7 +21,7 @@ export function NavigationRail({ activeTab, onTabChange }: NavigationRailProps) 
       {/* Logo area */}
       <div className="py-4 px-3">
         <div className="w-12 h-12 rounded-m3-large bg-md-primary-container flex items-center justify-center">
-          <MaterialIcon name="rss_feed" className="text-md-on-primary-container" />
+          <LucideIcon icon={Rss} className="text-md-on-primary-container" />
         </div>
       </div>
 
@@ -44,9 +47,8 @@ export function NavigationRail({ activeTab, onTabChange }: NavigationRailProps) 
                 }}
                 transition={{ duration: 0.2 }}
               >
-                <MaterialIcon 
-                  name={item.icon} 
-                  filled={isActive}
+                <LucideIcon 
+                  icon={item.icon} 
                   className={isActive ? "text-md-on-secondary-container" : "text-md-on-surface-variant"}
                 />
               </motion.div>

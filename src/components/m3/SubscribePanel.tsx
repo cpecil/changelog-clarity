@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MaterialIcon } from "./MaterialIcon";
+import { Bell, Mail, CheckCircle, Loader2, Rss } from "lucide-react";
+import { LucideIcon } from "./LucideIcon";
 
 export function SubscribePanel() {
   const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ export function SubscribePanel() {
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="w-12 h-12 rounded-m3-medium bg-md-primary-container flex items-center justify-center">
-            <MaterialIcon name="notifications_active" className="text-md-on-primary-container" />
+            <LucideIcon icon={Bell} className="text-md-on-primary-container" />
           </div>
           <div>
             <h2 className="headline-small text-md-on-surface">Stay updated</h2>
@@ -44,7 +45,7 @@ export function SubscribePanel() {
               animate={{ opacity: 1, scale: 1 }}
               className="flex items-center gap-3 p-4 rounded-m3-medium bg-status-complete/10"
             >
-              <MaterialIcon name="check_circle" className="text-status-complete" />
+              <LucideIcon icon={CheckCircle} className="text-status-complete" />
               <div>
                 <p className="title-medium text-md-on-surface">You're subscribed!</p>
                 <p className="body-medium text-md-on-surface-variant">
@@ -60,8 +61,8 @@ export function SubscribePanel() {
               exit={{ opacity: 0, scale: 0.95 }}
             >
               <div className="relative">
-                <MaterialIcon 
-                  name="mail" 
+                <LucideIcon 
+                  icon={Mail} 
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-md-on-surface-variant" 
                 />
                 <input
@@ -85,13 +86,13 @@ export function SubscribePanel() {
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     >
-                      <MaterialIcon name="progress_activity" />
+                      <LucideIcon icon={Loader2} />
                     </motion.div>
                     Subscribing...
                   </>
                 ) : (
                   <>
-                    <MaterialIcon name="notifications" />
+                    <LucideIcon icon={Bell} />
                     Subscribe to updates
                   </>
                 )}
@@ -112,7 +113,7 @@ export function SubscribePanel() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <MaterialIcon name="rss_feed" />
+              <LucideIcon icon={Rss} />
               RSS Feed
             </a>
           </div>

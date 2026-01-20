@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 @import "@fontsource/roboto-flex/variable.css";
-@import "@fontsource-variable/material-symbols-outlined";
+@import "@fontsource/poppins/400.css";
+@import "@fontsource/poppins/500.css";
+@import "@fontsource/poppins/600.css";
 
 /* Material Design 3 Expressive Design System */
 
@@ -159,23 +161,7 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  /* Material Symbols */
-  .material-symbols-outlined {
-    font-family: "Material Symbols OutlinedVariable", sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+  /* Lucide icons inherit color and size from parent */
 
   /* M3 Typography Scale */
   .display-large {

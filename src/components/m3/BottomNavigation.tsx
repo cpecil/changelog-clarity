@@ -1,14 +1,17 @@
-import { MaterialIcon } from "./MaterialIcon";
+import { AlertCircle, Bell, Scale } from "lucide-react";
+import { LucideIcon } from "./LucideIcon";
 import { cn } from "@/lib/utils";
+import type { LucideIcon as LucideIconType } from "lucide-react";
 
 interface BottomNavigationProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
 }
 
-const navItems = [
-  { id: "changelog", label: "Updates", icon: "article" },
-  { id: "subscribe", label: "Subscribe", icon: "notifications" },
+const navItems: { id: string; label: string; icon: LucideIconType }[] = [
+  { id: "alerts", label: "Alerts", icon: AlertCircle },
+  { id: "notifications", label: "Notifications", icon: Bell },
+  { id: "legal", label: "Legal", icon: Scale },
 ];
 
 export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationProps) {
@@ -31,9 +34,8 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
                   isActive ? "bg-md-secondary-container" : "transparent"
                 )}
               >
-                <MaterialIcon
-                  name={item.icon}
-                  filled={isActive}
+                <LucideIcon
+                  icon={item.icon}
                   className={cn(
                     "transition-colors",
                     isActive ? "text-md-on-secondary-container" : "text-md-on-surface-variant"

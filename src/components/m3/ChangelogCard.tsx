@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
+import { PlusCircle, ArrowUp, Wrench, MoreHorizontal, ExternalLink } from "lucide-react";
 import { ChangelogEntry, ChangeType } from "@/types/changelog";
 import { StatusChip } from "./StatusChip";
-import { MaterialIcon } from "./MaterialIcon";
+import { LucideIcon } from "./LucideIcon";
 import { cn } from "@/lib/utils";
+import type { LucideIcon as LucideIconType } from "lucide-react";
 
 interface ChangelogCardProps {
   entry: ChangelogEntry;
@@ -10,10 +12,10 @@ interface ChangelogCardProps {
   onClick?: () => void;
 }
 
-const typeConfig: Record<ChangeType, { icon: string; color: string; label: string }> = {
-  Added: { icon: "add_circle", color: "text-status-complete", label: "New" },
-  Improved: { icon: "arrow_upward", color: "text-md-primary", label: "Improved" },
-  Fixed: { icon: "build", color: "text-status-planned", label: "Fixed" },
+const typeConfig: Record<ChangeType, { icon: LucideIconType; color: string; label: string }> = {
+  Added: { icon: PlusCircle, color: "text-status-complete", label: "New" },
+  Improved: { icon: ArrowUp, color: "text-md-primary", label: "Improved" },
+  Fixed: { icon: Wrench, color: "text-status-planned", label: "Fixed" },
 };
 
 export function ChangelogCard({ entry, index, onClick }: ChangelogCardProps) {
@@ -76,8 +78,8 @@ export function ChangelogCard({ entry, index, onClick }: ChangelogCardProps) {
             const config = typeConfig[change.type];
             return (
               <li key={i} className="flex items-start gap-3">
-                <MaterialIcon
-                  name={config.icon}
+                <LucideIcon
+                  icon={config.icon}
                   size="small"
                   className={cn("flex-shrink-0 mt-0.5", config.color)}
                 />
@@ -89,7 +91,7 @@ export function ChangelogCard({ entry, index, onClick }: ChangelogCardProps) {
           })}
           {entry.changes.length > 3 && (
             <li className="flex items-center gap-3 body-medium text-md-on-surface-variant">
-              <MaterialIcon name="more_horiz" size="small" className="text-md-on-surface-variant" />
+              <LucideIcon icon={MoreHorizontal} size="small" className="text-md-on-surface-variant" />
               <span>+{entry.changes.length - 3} more changes</span>
             </li>
           )}
@@ -108,7 +110,7 @@ export function ChangelogCard({ entry, index, onClick }: ChangelogCardProps) {
                 rel="noopener noreferrer"
               >
                 {link.label}
-                <MaterialIcon name="open_in_new" size="small" />
+                <LucideIcon icon={ExternalLink} size="small" />
               </a>
             ))}
           </div>
