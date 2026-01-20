@@ -10,13 +10,25 @@ export function SubscribePanel() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate email
-    if (!email || !email.includes('@')) {
-      toast.error("Invalid Email", {
-        description: "Please enter a valid email address",
+    // Validate email format
+    if (!email.trim()) {
+      toast.error("Email required", {
+        description: "Please enter your email address",
+      });
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.error("Invalid email format", {
+        description: "Please include an '@' in the email address",
       });
       return;
     }
@@ -98,14 +110,15 @@ export function SubscribePanel() {
                   <Mail className="w-5 h-5 text-md-on-surface-variant" />
                 </div>
                 <input
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your.email@example.com"
-                  required
                   className="md-text-field-outlined w-full pl-12"
                   aria-label="Email address"
                   disabled={isLoading}
+                  autoComplete="email"
+                  inputMode="email"
                 />
               </div>
               <button
