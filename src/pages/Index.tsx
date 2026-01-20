@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { NavigationRail } from "@/components/m3/NavigationRail";
 import { TopAppBar } from "@/components/m3/TopAppBar";
 import { BottomNavigation } from "@/components/m3/BottomNavigation";
@@ -8,11 +8,12 @@ import { FilterChips } from "@/components/m3/FilterChips";
 import { SubscribePanel } from "@/components/m3/SubscribePanel";
 import { LegalPanel } from "@/components/m3/LegalPanel";
 import { SearchDialog } from "@/components/m3/SearchDialog";
+import { HomePanel } from "@/components/m3/HomePanel";
 import { changelogEntries } from "@/data/changelog-data";
 
 const Index = () => {
   const [isDark, setIsDark] = useState(false);
-  const [activeTab, setActiveTab] = useState("alerts");
+  const [activeTab, setActiveTab] = useState("home");
   const [selectedVersion, setSelectedVersion] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -49,6 +50,8 @@ const Index = () => {
 
   const renderContent = () => {
     switch (activeTab) {
+      case "home":
+        return <HomePanel onNavigate={setActiveTab} />;
       case "notifications":
         return <SubscribePanel />;
       case "legal":
@@ -56,10 +59,10 @@ const Index = () => {
       case "alerts":
       default:
         return (
-          <div className="max-w-3xl mx-auto py-6 md:py-8 px-4 md:px-6">
+          <div className="max-w-4xl mx-auto py-6 md:py-8 px-4 md:px-6">
             {/* Hero */}
             <header className="mb-8">
-              <h2 className="display-small text-md-on-surface mb-2">Alerts</h2>
+              <h2 className="display-small text-md-on-surface mb-2">All Updates</h2>
               <p className="body-large text-md-on-surface-variant">
                 Track all updates, improvements, and fixes
               </p>
@@ -76,14 +79,21 @@ const Index = () => {
               />
             </div>
 
-            {/* Changelog grid */}
-            <div className="space-y-4">
+            {/* Changelog grid - now in separate cards */}
+            <div className="grid gap-6 md:grid-cols-2">
               {filteredEntries.length > 0 ? (
                 filteredEntries.map((entry, index) => (
-                  <ChangelogCard key={entry.id} entry={entry} index={index} />
+                  <motion.div
+                    key={entry.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <ChangelogCard entry={entry} index={index} />
+                  </motion.div>
                 ))
               ) : (
-                <div className="md-card-outlined p-12 text-center">
+                <div className="md-card-outlined p-12 text-center col-span-2">
                   <p className="body-large text-md-on-surface-variant">
                     No entries match your filters
                   </p>

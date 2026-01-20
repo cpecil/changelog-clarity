@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { AlertCircle, Bell, Scale, Rss } from "lucide-react";
+import { Home, AlertCircle, Bell, Scale, Rss } from "lucide-react";
 import { LucideIcon } from "./LucideIcon";
 import { cn } from "@/lib/utils";
 import type { LucideIcon as LucideIconType } from "lucide-react";
@@ -10,6 +10,7 @@ interface NavigationRailProps {
 }
 
 const navItems: { id: string; label: string; icon: LucideIconType }[] = [
+  { id: "home", label: "Home", icon: Home },
   { id: "alerts", label: "Alerts", icon: AlertCircle },
   { id: "notifications", label: "Notifications", icon: Bell },
   { id: "legal", label: "Legal", icon: Scale },
