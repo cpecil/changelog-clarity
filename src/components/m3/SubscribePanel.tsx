@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, Mail, CheckCircle, Loader2, Rss } from "lucide-react";
+import { Bell, Mail, CheckCircle, Loader2, Rss, AlertCircle } from "lucide-react";
 import { LucideIcon } from "./LucideIcon";
 import { ConnectCard } from "./ConnectCard";
 import { toast } from "sonner";
@@ -9,26 +9,37 @@ export function SubscribePanel() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    setError(""); // Clear error when user types
+  };
+
+  const handleSubmit = async () => {
+    // Clear previous errors
+    setError("");
     
     // Validate email format
     if (!email.trim()) {
+      const errorMsg = "Please enter your email address";
+      setError(errorMsg);
       toast.error("Email required", {
-        description: "Please enter your email address",
+        description: errorMsg,
       });
       return;
     }
 
     if (!validateEmail(email)) {
+      const errorMsg = "Please include an '@' in the email address";
+      setError(errorMsg);
       toast.error("Invalid email format", {
-        description: "Please include an '@' in the email address",
+        description: errorMsg,
       });
       return;
     }
@@ -40,6 +51,7 @@ export function SubscribePanel() {
     
     setIsSubmitted(true);
     setIsLoading(false);
+    setError("");
     
     toast.success("Successfully Subscribed!", {
       description: `We'll send updates to ${email}`,
@@ -49,6 +61,7 @@ export function SubscribePanel() {
   const handleReset = () => {
     setIsSubmitted(false);
     setEmail("");
+    setError("");
   };
 
   return (
@@ -99,30 +112,56 @@ export function SubscribePanel() {
               </button>
             </motion.div>
           ) : (
-            <motion.form
+            <motion.div
               key="form"
-              onSubmit={handleSubmit}
               className="space-y-4"
               exit={{ opacity: 0, scale: 0.95 }}
             >
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
-                  <Mail className="w-5 h-5 text-md-on-surface-variant" />
+              <div className="space-y-2">
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
+                    <Mail className="w-5 h-5 text-md-on-surface-variant" />
+                  </div>
+                  <input
+                    type="text"
+                    value={email}
+                    onChange={handleEmailChange}
+                    placeholder="your.email@example.com"
+                    className={`md-text-field-outlined w-full pl-12 ${
+                      error ? 'border-red-500 focus:ring-red-500' : ''
+                    }`}
+                    aria-label="Email address"
+                    disabled={isLoading}
+                    autoComplete="email"
+                    inputMode="email"
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleSubmit();
+                      }
+                    }}
+                  />
                 </div>
-                <input
-                  type="text"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your.email@example.com"
-                  className="md-text-field-outlined w-full pl-12"
-                  aria-label="Email address"
-                  disabled={isLoading}
-                  autoComplete="email"
-                  inputMode="email"
-                />
+                
+                {/* Error message in Material Design style */}
+                <AnimatePresence>
+                  {error && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="flex items-start gap-2 text-red-500"
+                    >
+                      <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm">{error}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
+
               <button
-                type="submit"
+                type="button"
+                onClick={handleSubmit}
                 disabled={isLoading || !email}
                 className="md-filled-button w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -143,7 +182,7 @@ export function SubscribePanel() {
                   </>
                 )}
               </button>
-            </motion.form>
+            </motion.div>
           )}
         </AnimatePresence>
 
