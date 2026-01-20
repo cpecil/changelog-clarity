@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bell, Mail, CheckCircle, Loader2, Rss } from "lucide-react";
 import { LucideIcon } from "./LucideIcon";
+import { ConnectCard } from "./ConnectCard";
 
 export function SubscribePanel() {
   const [email, setEmail] = useState("");
@@ -19,7 +20,8 @@ export function SubscribePanel() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-8 px-4">
+    <div className="max-w-2xl mx-auto py-8 px-4 space-y-6">
+      {/* Subscribe Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -61,17 +63,16 @@ export function SubscribePanel() {
               exit={{ opacity: 0, scale: 0.95 }}
             >
               <div className="relative">
-                <LucideIcon 
-                  icon={Mail} 
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-md-on-surface-variant" 
-                />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <Mail className="w-5 h-5 text-md-on-surface-variant" />
+                </div>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
-                  className="md-text-field-outlined w-full pl-14"
+                  className="md-text-field-outlined w-full pl-12"
                   aria-label="Email address"
                 />
               </div>
@@ -86,7 +87,7 @@ export function SubscribePanel() {
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     >
-                      <LucideIcon icon={Loader2} />
+                      <Loader2 className="w-5 h-5" />
                     </motion.div>
                     Subscribing...
                   </>
@@ -101,8 +102,8 @@ export function SubscribePanel() {
           )}
         </AnimatePresence>
 
-        {/* Alternative options */}
-        <div className="mt-8 pt-6 border-t border-md-outline-variant">
+        {/* RSS Feed option */}
+        <div className="mt-6 pt-6 border-t border-md-outline-variant">
           <p className="label-large text-md-on-surface-variant mb-4">
             Other ways to stay updated
           </p>
@@ -119,6 +120,9 @@ export function SubscribePanel() {
           </div>
         </div>
       </motion.div>
+
+      {/* Connect Card */}
+      <ConnectCard />
     </div>
   );
 }

@@ -1,39 +1,58 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { FileText, Shield, Cookie, Scale, ExternalLink } from "lucide-react";
+import { FileText, Shield, Cookie, Scale, ChevronRight } from "lucide-react";
 import { LucideIcon } from "./LucideIcon";
+import { TermsPage } from "./TermsPage";
+import { PrivacyPage } from "./PrivacyPage";
+import { CookiePage } from "./CookiePage";
+import { LicensePage } from "./LicensePage";
+import type { LucideIcon as LucideIconType } from "lucide-react";
 
-const legalDocs = [
+type LegalPage = "list" | "terms" | "privacy" | "cookies" | "license";
+
+const legalDocs: { id: LegalPage; title: string; description: string; icon: LucideIconType }[] = [
   {
     id: "terms",
     title: "Terms of Service",
     description: "Our terms and conditions for using the service",
     icon: FileText,
-    url: "#terms",
   },
   {
     id: "privacy",
     title: "Privacy Policy",
     description: "How we collect, use, and protect your data",
     icon: Shield,
-    url: "#privacy",
   },
   {
     id: "cookies",
     title: "Cookie Policy",
     description: "Information about cookies and tracking",
     icon: Cookie,
-    url: "#cookies",
   },
   {
     id: "license",
     title: "License Agreement",
     description: "Software licensing terms and usage rights",
     icon: Scale,
-    url: "#license",
   },
 ];
 
 export function LegalPanel() {
+  const [activePage, setActivePage] = useState<LegalPage>("list");
+
+  if (activePage === "terms") {
+    return <TermsPage onBack={() => setActivePage("list")} />;
+  }
+  if (activePage === "privacy") {
+    return <PrivacyPage onBack={() => setActivePage("list")} />;
+  }
+  if (activePage === "cookies") {
+    return <CookiePage onBack={() => setActivePage("list")} />;
+  }
+  if (activePage === "license") {
+    return <LicensePage onBack={() => setActivePage("list")} />;
+  }
+
   return (
     <div className="max-w-2xl mx-auto py-8 px-4">
       <motion.div
@@ -52,13 +71,13 @@ export function LegalPanel() {
         {/* Legal document cards */}
         <div className="grid gap-4">
           {legalDocs.map((doc, index) => (
-            <motion.a
+            <motion.button
               key={doc.id}
-              href={doc.url}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="md-card-elevated p-5 flex items-center gap-4 group hover:bg-md-on-surface/[0.08] transition-colors"
+              onClick={() => setActivePage(doc.id)}
+              className="md-card-elevated p-5 flex items-center gap-4 group hover:bg-md-on-surface/[0.08] transition-colors text-left w-full"
             >
               <div className="w-12 h-12 rounded-m3-medium bg-md-secondary-container flex items-center justify-center flex-shrink-0">
                 <LucideIcon 
@@ -75,11 +94,11 @@ export function LegalPanel() {
                 </p>
               </div>
               <LucideIcon 
-                icon={ExternalLink} 
+                icon={ChevronRight} 
                 size="small"
                 className="text-md-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" 
               />
-            </motion.a>
+            </motion.button>
           ))}
         </div>
 
