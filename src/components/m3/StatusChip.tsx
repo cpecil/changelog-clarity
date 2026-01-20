@@ -1,7 +1,9 @@
 import { RolloutStatus } from "@/types/changelog";
-import { MaterialIcon } from "./MaterialIcon";
+import { Clock, RefreshCw, CheckCircle } from "lucide-react";
+import { LucideIcon } from "./LucideIcon";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import type { LucideIcon as LucideIconType } from "lucide-react";
 
 interface StatusChipProps {
   status: RolloutStatus;
@@ -10,25 +12,25 @@ interface StatusChipProps {
 
 const statusConfig: Record<RolloutStatus, {
   label: string;
-  icon: string;
+  icon: LucideIconType;
   bgClass: string;
   textClass: string;
 }> = {
   Planned: {
     label: "Planned",
-    icon: "schedule",
+    icon: Clock,
     bgClass: "bg-status-planned/20",
     textClass: "text-status-planned",
   },
   "Rolling out": {
     label: "Rolling out",
-    icon: "sync",
+    icon: RefreshCw,
     bgClass: "bg-status-rolling/20",
     textClass: "text-status-rolling",
   },
   Complete: {
     label: "Complete",
-    icon: "check_circle",
+    icon: CheckCircle,
     bgClass: "bg-status-complete/20",
     textClass: "text-status-complete",
   },
@@ -49,18 +51,19 @@ export function StatusChip({ status, size = "medium" }: StatusChipProps) {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+          className="flex items-center justify-center"
         >
-          <MaterialIcon 
-            name={config.icon} 
+          <LucideIcon 
+            icon={config.icon} 
             size="small" 
-            className={cn("text-[16px]", config.textClass)} 
+            className={config.textClass} 
           />
         </motion.div>
       ) : (
-        <MaterialIcon 
-          name={config.icon} 
+        <LucideIcon 
+          icon={config.icon} 
           size="small" 
-          className={cn("text-[16px]", config.textClass)} 
+          className={config.textClass} 
         />
       )}
       <span

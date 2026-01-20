@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { MaterialIcon } from "./MaterialIcon";
+import { ChevronDown, Check } from "lucide-react";
+import { LucideIcon } from "./LucideIcon";
 import { cn } from "@/lib/utils";
 import { RolloutStatus } from "@/types/changelog";
 
@@ -40,10 +41,10 @@ export function FilterChips({
             </option>
           ))}
         </select>
-        <MaterialIcon 
-          name="arrow_drop_down" 
+        <LucideIcon 
+          icon={ChevronDown} 
           size="small" 
-          className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" 
+          className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-md-on-surface-variant" 
         />
       </div>
 
@@ -60,7 +61,7 @@ export function FilterChips({
           whileTap={{ scale: 0.98 }}
         >
           {selectedStatus === status && (
-            <MaterialIcon name="check" size="small" className="text-[16px]" />
+            <LucideIcon icon={Check} size="small" />
           )}
           {status}
         </motion.button>

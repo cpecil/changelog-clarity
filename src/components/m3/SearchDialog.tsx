@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MaterialIcon } from "./MaterialIcon";
+import { Search, SearchX, FileText, ArrowRight, Keyboard, CornerDownLeft } from "lucide-react";
 import { ChangelogEntry } from "@/types/changelog";
 import { StatusChip } from "./StatusChip";
+import { LucideIcon } from "./LucideIcon";
 
 interface SearchDialogProps {
   isOpen: boolean;
@@ -94,7 +95,7 @@ export function SearchDialog({ isOpen, onClose, entries, onSelectEntry }: Search
             <div className="md-card-elevated overflow-hidden bg-md-surface-container">
               {/* Search input */}
               <div className="flex items-center gap-3 p-4 border-b border-md-outline-variant">
-                <MaterialIcon name="search" className="text-md-on-surface-variant" />
+                <LucideIcon icon={Search} className="text-md-on-surface-variant" />
                 <input
                   ref={inputRef}
                   type="text"
@@ -115,7 +116,7 @@ export function SearchDialog({ isOpen, onClose, entries, onSelectEntry }: Search
               <div className="max-h-[400px] overflow-y-auto">
                 {query && filteredEntries.length === 0 ? (
                   <div className="p-8 text-center">
-                    <MaterialIcon name="search_off" size="large" className="text-md-on-surface-variant mb-2" />
+                    <LucideIcon icon={SearchX} size="large" className="text-md-on-surface-variant mb-2 mx-auto" />
                     <p className="body-large text-md-on-surface-variant">No results found</p>
                   </div>
                 ) : query ? (
@@ -133,8 +134,8 @@ export function SearchDialog({ isOpen, onClose, entries, onSelectEntry }: Search
                             : "hover:bg-md-on-surface/[0.08]"
                         }`}
                       >
-                        <MaterialIcon
-                          name="article"
+                        <LucideIcon
+                          icon={FileText}
                           className={index === selectedIndex ? "text-md-on-secondary-container" : "text-md-on-surface-variant"}
                         />
                         <div className="flex-1 min-w-0">
@@ -146,8 +147,8 @@ export function SearchDialog({ isOpen, onClose, entries, onSelectEntry }: Search
                             {entry.summary}
                           </p>
                         </div>
-                        <MaterialIcon
-                          name="arrow_forward"
+                        <LucideIcon
+                          icon={ArrowRight}
                           size="small"
                           className={`flex-shrink-0 ${
                             index === selectedIndex ? "text-md-on-secondary-container" : "text-md-on-surface-variant opacity-0"
@@ -161,11 +162,11 @@ export function SearchDialog({ isOpen, onClose, entries, onSelectEntry }: Search
                     <p className="label-medium text-md-on-surface-variant mb-3">Quick tips</p>
                     <div className="space-y-2">
                       <div className="flex items-center gap-3 body-medium text-md-on-surface-variant">
-                        <MaterialIcon name="keyboard" size="small" />
+                        <LucideIcon icon={Keyboard} size="small" />
                         <span>Use arrow keys to navigate</span>
                       </div>
                       <div className="flex items-center gap-3 body-medium text-md-on-surface-variant">
-                        <MaterialIcon name="keyboard_return" size="small" />
+                        <LucideIcon icon={CornerDownLeft} size="small" />
                         <span>Press Enter to select</span>
                       </div>
                     </div>

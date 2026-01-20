@@ -6,12 +6,13 @@ import { BottomNavigation } from "@/components/m3/BottomNavigation";
 import { ChangelogCard } from "@/components/m3/ChangelogCard";
 import { FilterChips } from "@/components/m3/FilterChips";
 import { SubscribePanel } from "@/components/m3/SubscribePanel";
+import { LegalPanel } from "@/components/m3/LegalPanel";
 import { SearchDialog } from "@/components/m3/SearchDialog";
 import { changelogEntries } from "@/data/changelog-data";
 
 const Index = () => {
   const [isDark, setIsDark] = useState(false);
-  const [activeTab, setActiveTab] = useState("changelog");
+  const [activeTab, setActiveTab] = useState("alerts");
   const [selectedVersion, setSelectedVersion] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -48,14 +49,17 @@ const Index = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case "subscribe":
+      case "notifications":
         return <SubscribePanel />;
+      case "legal":
+        return <LegalPanel />;
+      case "alerts":
       default:
         return (
           <div className="max-w-3xl mx-auto py-6 md:py-8 px-4 md:px-6">
             {/* Hero */}
             <header className="mb-8">
-              <h2 className="display-small text-md-on-surface mb-2">What's new</h2>
+              <h2 className="display-small text-md-on-surface mb-2">Alerts</h2>
               <p className="body-large text-md-on-surface-variant">
                 Track all updates, improvements, and fixes
               </p>
