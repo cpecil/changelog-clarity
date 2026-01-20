@@ -127,9 +127,10 @@ export function SubscribePanel() {
                     value={email}
                     onChange={handleEmailChange}
                     placeholder="your.email@example.com"
-                    className={`md-text-field-outlined w-full pl-12 ${
+                    className={`md-text-field-outlined w-full pl-14 ${
                       error ? 'border-red-500 focus:ring-red-500' : ''
                     }`}
+                    style={{ paddingLeft: '3.5rem' }}
                     aria-label="Email address"
                     disabled={isLoading}
                     autoComplete="email"
