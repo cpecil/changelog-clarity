@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Bell, Mail, CheckCircle, Loader2, Rss } from "lucide-react";
 import { LucideIcon } from "./LucideIcon";
 import { ConnectCard } from "./ConnectCard";
+import { toast } from "sonner";
 
 export function SubscribePanel() {
   const [email, setEmail] = useState("");
@@ -11,12 +12,31 @@ export function SubscribePanel() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    
+    // Validate email
+    if (!email || !email.includes('@')) {
+      toast.error("Invalid Email", {
+        description: "Please enter a valid email address",
+      });
+      return;
+    }
 
     setIsLoading(true);
+
+    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 800));
+    
     setIsSubmitted(true);
     setIsLoading(false);
+    
+    toast.success("Successfully Subscribed!", {
+      description: `We'll send updates to ${email}`,
+    });
+  };
+
+  const handleReset = () => {
+    setIsSubmitted(false);
+    setEmail("");
   };
 
   return (
@@ -45,15 +65,26 @@ export function SubscribePanel() {
               key="success"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center gap-3 p-4 rounded-m3-medium bg-status-complete/10"
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="space-y-4"
             >
-              <LucideIcon icon={CheckCircle} className="text-status-complete" />
-              <div>
-                <p className="title-medium text-md-on-surface">You're subscribed!</p>
-                <p className="body-medium text-md-on-surface-variant">
-                  We'll send you updates when new features are released.
-                </p>
+              <div className="flex items-center gap-3 p-4 rounded-m3-medium bg-status-complete/10">
+                <LucideIcon icon={CheckCircle} className="text-status-complete" />
+                <div>
+                  <p className="title-medium text-md-on-surface">You're subscribed!</p>
+                  <p className="body-medium text-md-on-surface-variant">
+                    We'll send you updates when new features are released.
+                  </p>
+                </div>
               </div>
+              
+              {/* Reset button */}
+              <button
+                onClick={handleReset}
+                className="md-text-button w-full"
+              >
+                Subscribe another email
+              </button>
             </motion.div>
           ) : (
             <motion.form
@@ -63,23 +94,24 @@ export function SubscribePanel() {
               exit={{ opacity: 0, scale: 0.95 }}
             >
               <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
                   <Mail className="w-5 h-5 text-md-on-surface-variant" />
                 </div>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder="your.email@example.com"
                   required
                   className="md-text-field-outlined w-full pl-12"
                   aria-label="Email address"
+                  disabled={isLoading}
                 />
               </div>
               <button
                 type="submit"
-                disabled={isLoading}
-                className="md-filled-button w-full disabled:opacity-50"
+                disabled={isLoading || !email}
+                className="md-filled-button w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <>
