@@ -58,6 +58,7 @@ export function LegalPanel() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ ease: [0.2, 0, 0, 1] }}
         className="space-y-6"
       >
         {/* Header */}
@@ -68,46 +69,39 @@ export function LegalPanel() {
           </p>
         </div>
 
-        {/* Legal document cards */}
-        <div className="grid gap-4">
-          {legalDocs.map((doc, index) => (
-            <motion.button
-              key={doc.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              onClick={() => setActivePage(doc.id)}
-              className="md-card-elevated p-5 flex items-center gap-4 group hover:bg-md-on-surface/[0.08] transition-colors text-left w-full"
-            >
-              <div className="w-12 h-12 rounded-m3-medium bg-md-secondary-container flex items-center justify-center flex-shrink-0">
-                <LucideIcon 
-                  icon={doc.icon} 
-                  className="text-md-on-secondary-container" 
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="title-medium text-md-on-surface mb-1">
-                  {doc.title}
-                </h3>
-                <p className="body-medium text-md-on-surface-variant">
-                  {doc.description}
-                </p>
-              </div>
-              <LucideIcon 
-                icon={ChevronRight} 
-                size="small"
-                className="text-md-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" 
-              />
-            </motion.button>
-          ))}
+        {/* Legal document list - M3 List spec */}
+        <div className="md-card-outlined overflow-hidden">
+          <div className="md-list">
+            {legalDocs.map((doc, index) => (
+              <motion.button
+                key={doc.id}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05, ease: [0.2, 0, 0, 1] }}
+                onClick={() => setActivePage(doc.id)}
+                className="md-list-item w-full text-left group"
+              >
+                <div className="md-list-item-leading">
+                  <LucideIcon icon={doc.icon} size="small" />
+                </div>
+                <div className="md-list-item-content">
+                  <p className="md-list-item-headline">{doc.title}</p>
+                  <p className="md-list-item-supporting">{doc.description}</p>
+                </div>
+                <div className="md-list-item-trailing opacity-0 group-hover:opacity-100 transition-opacity">
+                  <LucideIcon icon={ChevronRight} size="small" />
+                </div>
+              </motion.button>
+            ))}
+          </div>
         </div>
 
         {/* Footer note */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="pt-6 border-t border-md-outline-variant"
+          transition={{ delay: 0.3 }}
+          className="pt-6"
         >
           <p className="body-small text-md-on-surface-variant text-center">
             Last updated: January 2026

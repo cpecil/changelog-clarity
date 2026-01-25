@@ -18,35 +18,27 @@ export function SubscribePanel() {
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    setError(""); // Clear error when user types
+    setError("");
   };
 
   const handleSubmit = async () => {
-    // Clear previous errors
     setError("");
     
-    // Validate email format
     if (!email.trim()) {
       const errorMsg = "Please enter your email address";
       setError(errorMsg);
-      toast.error("Email required", {
-        description: errorMsg,
-      });
+      toast.error("Email required", { description: errorMsg });
       return;
     }
 
     if (!validateEmail(email)) {
       const errorMsg = "Please include an '@' in the email address";
       setError(errorMsg);
-      toast.error("Invalid email format", {
-        description: errorMsg,
-      });
+      toast.error("Invalid email format", { description: errorMsg });
       return;
     }
 
     setIsLoading(true);
-
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 800));
     
     setIsSubmitted(true);
@@ -70,10 +62,15 @@ export function SubscribePanel() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ ease: [0.2, 0, 0, 1] }}
         className="md-card-elevated p-6 md:p-8"
       >
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-m3-medium bg-md-primary-container flex items-center justify-center">
+        {/* Header with icon */}
+        <div className="flex items-center gap-4 mb-8">
+          <div 
+            className="w-14 h-14 rounded-m3-large flex items-center justify-center"
+            style={{ background: 'hsl(var(--md-sys-color-primary-container))' }}
+          >
             <LucideIcon icon={Bell} className="text-md-on-primary-container" />
           </div>
           <div>
@@ -91,9 +88,13 @@ export function SubscribePanel() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="space-y-4"
+              transition={{ ease: [0.2, 0, 0, 1] }}
+              className="space-y-6"
             >
-              <div className="flex items-center gap-3 p-4 rounded-m3-medium bg-status-complete/10">
+              <div 
+                className="flex items-center gap-4 p-4 rounded-m3-medium"
+                style={{ background: 'hsl(var(--status-complete) / 0.12)' }}
+              >
                 <LucideIcon icon={CheckCircle} className="text-status-complete" />
                 <div>
                   <p className="title-medium text-md-on-surface">You're subscribed!</p>
@@ -103,7 +104,6 @@ export function SubscribePanel() {
                 </div>
               </div>
               
-              {/* Reset button */}
               <button
                 onClick={handleReset}
                 className="md-text-button w-full"
@@ -114,28 +114,27 @@ export function SubscribePanel() {
           ) : (
             <motion.div
               key="form"
-              className="space-y-4"
+              className="space-y-6"
               exit={{ opacity: 0, scale: 0.95 }}
             >
+              {/* Email input - M3 Text Field */}
               <div className="space-y-2">
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
                     <Mail className="w-5 h-5 text-md-on-surface-variant" />
                   </div>
                   <input
-                    type="text"
+                    type="email"
                     value={email}
                     onChange={handleEmailChange}
                     placeholder="your.email@example.com"
-                    className={`md-text-field-outlined w-full pl-14 ${
-                      error ? 'border-red-500 focus:ring-red-500' : ''
-                    }`}
-                    style={{ paddingLeft: '3.5rem' }}
+                    className={`md-text-field-outlined w-full ${error ? 'border-md-error' : ''}`}
+                    style={{ paddingLeft: '3rem' }}
                     aria-label="Email address"
                     disabled={isLoading}
                     autoComplete="email"
                     inputMode="email"
-                    onKeyPress={(e) => {
+                    onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                         handleSubmit();
@@ -144,22 +143,23 @@ export function SubscribePanel() {
                   />
                 </div>
                 
-                {/* Error message in Material Design style */}
+                {/* Error message */}
                 <AnimatePresence>
                   {error && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="flex items-start gap-2 text-red-500"
+                      className="flex items-start gap-2 text-md-error"
                     >
                       <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                      <p className="text-sm">{error}</p>
+                      <p className="body-small">{error}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
 
+              {/* Submit button */}
               <button
                 type="button"
                 onClick={handleSubmit}
@@ -178,7 +178,7 @@ export function SubscribePanel() {
                   </>
                 ) : (
                   <>
-                    <LucideIcon icon={Bell} />
+                    <LucideIcon icon={Bell} size="small" />
                     Subscribe to updates
                   </>
                 )}
@@ -188,7 +188,7 @@ export function SubscribePanel() {
         </AnimatePresence>
 
         {/* RSS Feed option */}
-        <div className="mt-6 pt-6 border-t border-md-outline-variant">
+        <div className="mt-8 pt-6 border-t border-md-outline-variant">
           <p className="label-large text-md-on-surface-variant mb-4">
             Other ways to stay updated
           </p>
@@ -199,7 +199,7 @@ export function SubscribePanel() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <LucideIcon icon={Rss} />
+              <LucideIcon icon={Rss} size="small" />
               RSS Feed
             </a>
           </div>

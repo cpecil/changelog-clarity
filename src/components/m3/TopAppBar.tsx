@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Search, Sun, Moon, Rss } from "lucide-react";
 import { LucideIcon } from "./LucideIcon";
+import { cn } from "@/lib/utils";
 
 interface TopAppBarProps {
   title: string;
@@ -15,48 +17,78 @@ export function TopAppBar({
   onToggleTheme,
   onSearchClick,
 }: TopAppBarProps) {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 bg-md-surface/95 backdrop-blur-sm border-b border-md-outline-variant">
-      <div className="flex items-center justify-between h-16 px-4 md:px-6">
-        {/* Left section */}
-        <div className="flex items-center gap-4">
-          {/* Mobile logo */}
-          <div className="md:hidden w-10 h-10 rounded-m3-medium bg-md-primary-container flex items-center justify-center">
-            <LucideIcon icon={Rss} className="text-md-on-primary-container" size="small" />
-          </div>
-          <h1 className="title-large text-md-on-surface">{title}</h1>
+    <header 
+      className={cn(
+        "md-top-app-bar",
+        isScrolled && "md-top-app-bar-scrolled"
+      )}
+    >
+      {/* Leading - Mobile logo */}
+      <div className="md:hidden mr-2">
+        <div 
+          className="w-10 h-10 rounded-m3-medium flex items-center justify-center"
+          style={{ 
+            background: 'hsl(var(--md-sys-color-primary-container))'
+          }}
+        >
+          <LucideIcon 
+            icon={Rss} 
+            size="small" 
+            className="text-md-on-primary-container" 
+          />
         </div>
+      </div>
 
-        {/* Right section */}
-        <div className="flex items-center gap-1">
-          {/* Search button */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={onSearchClick}
-            className="w-10 h-10 flex items-center justify-center rounded-m3-full hover:bg-md-on-surface/[0.08] relative group"
-            aria-label="Search (⌘K)"
-          >
-            <LucideIcon icon={Search} className="text-md-on-surface-variant" />
-            <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-md-inverse-surface text-md-inverse-on-surface label-small opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-              ⌘K
-            </span>
-          </motion.button>
+      {/* Title */}
+      <h1 className="title-large text-md-on-surface flex-1">{title}</h1>
 
-          {/* Theme toggle */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={onToggleTheme}
-            className="w-10 h-10 flex items-center justify-center rounded-m3-full hover:bg-md-on-surface/[0.08]"
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      {/* Trailing actions */}
+      <div className="flex items-center">
+        {/* Search button */}
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onSearchClick}
+          className="md-icon-button group relative"
+          aria-label="Search (⌘K)"
+        >
+          <LucideIcon icon={Search} size="small" />
+          <span 
+            className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-2 py-1 rounded-m3-small label-small opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50"
+            style={{ 
+              background: 'hsl(var(--md-sys-color-inverse-surface))',
+              color: 'hsl(var(--md-sys-color-inverse-on-surface))'
+            }}
           >
-            <LucideIcon 
-              icon={isDark ? Sun : Moon} 
-              className="text-md-on-surface-variant" 
-            />
-          </motion.button>
-        </div>
+            ⌘K
+          </span>
+        </motion.button>
+
+        {/* Theme toggle */}
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onToggleTheme}
+          className="md-icon-button"
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          <LucideIcon 
+            icon={isDark ? Sun : Moon} 
+            size="small"
+          />
+        </motion.button>
       </div>
     </header>
   );

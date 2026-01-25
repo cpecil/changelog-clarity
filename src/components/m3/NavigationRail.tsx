@@ -19,25 +19,33 @@ const navItems: { id: string; label: string; icon: LucideIconType }[] = [
 export function NavigationRail({ activeTab, onTabChange }: NavigationRailProps) {
   return (
     <nav className="hidden md:flex md-nav-rail border-r border-md-outline-variant h-screen sticky top-0">
-      {/* Logo area */}
-      <div className="py-4 px-3">
-        <div className="w-12 h-12 rounded-m3-large bg-md-primary-container flex items-center justify-center">
-          <LucideIcon icon={Rss} className="text-md-on-primary-container" />
-        </div>
+      {/* FAB area - Logo */}
+      <div className="py-6 px-3">
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          className="md-fab-small cursor-pointer"
+          style={{ 
+            background: 'hsl(var(--md-sys-color-primary-container))',
+            color: 'hsl(var(--md-sys-color-on-primary-container))'
+          }}
+        >
+          <LucideIcon icon={Rss} size="small" />
+        </motion.div>
       </div>
 
-      {/* Navigation items */}
-      <div className="flex-1 flex flex-col items-center gap-1 py-4 mt-4">
+      {/* Navigation destinations */}
+      <div className="flex-1 flex flex-col items-center gap-0 py-6">
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
 
           return (
-            <button
+            <motion.button
               key={item.id}
               onClick={() => onTabChange(item.id)}
               className="md-nav-rail-item"
               data-active={isActive}
               aria-label={item.label}
+              whileTap={{ scale: 0.95 }}
             >
               <motion.div
                 className="md-nav-rail-item-icon"
@@ -46,20 +54,31 @@ export function NavigationRail({ activeTab, onTabChange }: NavigationRailProps) 
                     ? "hsl(var(--md-sys-color-secondary-container))"
                     : "transparent",
                 }}
-                transition={{ duration: 0.2 }}
+                transition={{ 
+                  duration: 0.2,
+                  ease: [0.2, 0, 0, 1]
+                }}
               >
                 <LucideIcon 
                   icon={item.icon} 
-                  className={isActive ? "text-md-on-secondary-container" : "text-md-on-surface-variant"}
+                  size="small"
+                  className={cn(
+                    "transition-colors",
+                    isActive 
+                      ? "text-md-on-secondary-container" 
+                      : "text-md-on-surface-variant"
+                  )}
                 />
               </motion.div>
               <span className={cn(
-                "label-medium",
-                isActive ? "text-md-on-surface" : "text-md-on-surface-variant"
+                "label-medium transition-colors",
+                isActive 
+                  ? "text-md-on-surface" 
+                  : "text-md-on-surface-variant"
               )}>
                 {item.label}
               </span>
-            </button>
+            </motion.button>
           );
         })}
       </div>

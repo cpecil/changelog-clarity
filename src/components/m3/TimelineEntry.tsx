@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
-import { ExternalLink, ChevronRight } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { ChangelogEntry, ChangeType } from "@/types/changelog";
-import { LucideIcon } from "./LucideIcon";
 import { cn } from "@/lib/utils";
 
 interface TimelineEntryProps {
@@ -13,8 +12,8 @@ const categoryConfig: Record<string, { label: string; class: string }> = {
   feature: { label: "Feature", class: "category-badge feature" },
   improvement: { label: "Update", class: "category-badge update" },
   bugfix: { label: "Fix", class: "category-badge fix" },
-  security: { label: "Fix", class: "category-badge fix" },
-  breaking: { label: "Announcement", class: "category-badge announcement" },
+  security: { label: "Security", class: "category-badge fix" },
+  breaking: { label: "Breaking", class: "category-badge announcement" },
 };
 
 const changeTypeColors: Record<ChangeType, string> = {
@@ -34,7 +33,7 @@ export function TimelineEntry({ entry, index }: TimelineEntryProps) {
     : { label: "Update", class: "category-badge update" };
 
   return (
-    <motion.div
+    <motion.article
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
@@ -44,7 +43,7 @@ export function TimelineEntry({ entry, index }: TimelineEntryProps) {
       }}
       className="timeline-entry group"
     >
-      {/* Date column */}
+      {/* Date column - Desktop */}
       <div className="hidden md:block">
         <div className="sticky top-20">
           <span className="label-medium text-md-on-surface-variant">{formattedDate}</span>
@@ -55,50 +54,67 @@ export function TimelineEntry({ entry, index }: TimelineEntryProps) {
       <div className="timeline-dot" />
 
       {/* Content */}
-      <div className="pb-8">
+      <div className="pb-10">
         {/* Mobile date */}
-        <div className="md:hidden mb-2">
+        <div className="md:hidden mb-3">
           <span className="label-medium text-md-on-surface-variant">{formattedDate}</span>
         </div>
 
         {/* Category & Version badges */}
-        <div className="flex flex-wrap items-center gap-2 mb-3">
+        <div className="flex flex-wrap items-center gap-2 mb-4">
           <span className={categoryInfo.class}>
             {categoryInfo.label}
           </span>
           {entry.version && (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded bg-md-surface-container-high text-md-on-surface-variant label-medium font-mono">
+            <span 
+              className="inline-flex items-center px-3 h-6 rounded-m3-small label-medium font-mono"
+              style={{
+                background: 'hsl(var(--md-sys-color-surface-container-high))',
+                color: 'hsl(var(--md-sys-color-on-surface-variant))'
+              }}
+            >
               {entry.version}
             </span>
           )}
         </div>
 
         {/* Summary */}
-        <p className="body-large text-md-on-surface leading-relaxed mb-3">
+        <p className="body-large text-md-on-surface leading-relaxed mb-4">
           {entry.summary}
-          {entry.changes.length > 0 && (
-            <span className="text-md-on-surface-variant">
-              {" "}
-              {entry.changes.slice(0, 2).map((change, i) => (
-                <span key={i}>
-                  {i > 0 && ", "}
-                  <span className={cn("font-medium", changeTypeColors[change.type])}>
-                    {change.text}
-                  </span>
-                </span>
-              ))}
-              {entry.changes.length > 2 && (
-                <span className="text-md-on-surface-variant">
-                  {" "}and {entry.changes.length - 2} more changes.
-                </span>
-              )}
-            </span>
-          )}
         </p>
+
+        {/* Changes list */}
+        {entry.changes.length > 0 && (
+          <div className="space-y-2 mb-4">
+            {entry.changes.slice(0, 3).map((change, i) => (
+              <div 
+                key={i}
+                className="flex items-start gap-3 body-medium"
+              >
+                <span 
+                  className={cn(
+                    "label-small px-2 py-0.5 rounded-m3-small shrink-0 mt-0.5",
+                    change.type === "Added" && "bg-status-complete/15 text-status-complete",
+                    change.type === "Improved" && "bg-md-primary/15 text-md-primary",
+                    change.type === "Fixed" && "bg-status-planned/15 text-status-planned"
+                  )}
+                >
+                  {change.type}
+                </span>
+                <span className="text-md-on-surface-variant">{change.text}</span>
+              </div>
+            ))}
+            {entry.changes.length > 3 && (
+              <p className="body-small text-md-on-surface-variant pl-16">
+                +{entry.changes.length - 3} more changes
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Links */}
         {entry.links && entry.links.length > 0 && (
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4 mt-4">
             {entry.links.map((link, i) => (
               <a
                 key={i}
@@ -114,6 +130,6 @@ export function TimelineEntry({ entry, index }: TimelineEntryProps) {
           </div>
         )}
       </div>
-    </motion.div>
+    </motion.article>
   );
 }
