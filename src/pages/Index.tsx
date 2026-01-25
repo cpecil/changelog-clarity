@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { NavigationRail } from "@/components/m3/NavigationRail";
 import { TopAppBar } from "@/components/m3/TopAppBar";
 import { BottomNavigation } from "@/components/m3/BottomNavigation";
-import { ChangelogCard } from "@/components/m3/ChangelogCard";
+import { TimelineEntry } from "@/components/m3/TimelineEntry";
 import { FilterChips } from "@/components/m3/FilterChips";
 import { SubscribePanel } from "@/components/m3/SubscribePanel";
 import { LegalPanel } from "@/components/m3/LegalPanel";
@@ -48,6 +48,23 @@ const Index = () => {
     });
   }, [selectedVersion, selectedStatus]);
 
+  // Group entries by month
+  const groupedEntries = useMemo(() => {
+    const groups: { [key: string]: typeof filteredEntries } = {};
+    filteredEntries.forEach((entry) => {
+      const date = new Date(entry.release_date);
+      const monthYear = date.toLocaleDateString("en-US", { 
+        month: "long", 
+        year: "numeric" 
+      });
+      if (!groups[monthYear]) {
+        groups[monthYear] = [];
+      }
+      groups[monthYear].push(entry);
+    });
+    return groups;
+  }, [filteredEntries]);
+
   const renderContent = () => {
     switch (activeTab) {
       case "home":
@@ -62,14 +79,14 @@ const Index = () => {
           <div className="max-w-4xl mx-auto py-6 md:py-8 px-4 md:px-6">
             {/* Hero */}
             <header className="mb-8">
-              <h2 className="display-small text-md-on-surface mb-2">All Updates</h2>
+              <h2 className="display-small text-md-on-surface mb-2">Changelog</h2>
               <p className="body-large text-md-on-surface-variant">
-                Track all updates, improvements, and fixes
+                All the latest updates, improvements, and fixes
               </p>
             </header>
 
             {/* Filters */}
-            <div className="mb-6">
+            <div className="mb-8">
               <FilterChips
                 versions={versions}
                 selectedVersion={selectedVersion}
@@ -79,25 +96,47 @@ const Index = () => {
               />
             </div>
 
-            {/* Changelog grid - now in separate cards */}
-            <div className="grid gap-6 md:grid-cols-2">
-              {filteredEntries.length > 0 ? (
-                filteredEntries.map((entry, index) => (
-                  <motion.div
-                    key={entry.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <ChangelogCard entry={entry} index={index} />
-                  </motion.div>
+            {/* Timeline */}
+            <div className="timeline-container">
+              <div className="timeline-line" />
+              
+              {Object.keys(groupedEntries).length > 0 ? (
+                Object.entries(groupedEntries).map(([monthYear, entries], groupIndex) => (
+                  <div key={monthYear}>
+                    {/* Month Header */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: groupIndex * 0.1 }}
+                      className="month-header"
+                    >
+                      <h3 className="headline-small text-md-on-surface pl-8 md:pl-0">
+                        {monthYear}
+                      </h3>
+                    </motion.div>
+
+                    {/* Entries */}
+                    <div className="space-y-0">
+                      {entries.map((entry, index) => (
+                        <TimelineEntry
+                          key={entry.id}
+                          entry={entry}
+                          index={index + (groupIndex * 10)}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 ))
               ) : (
-                <div className="md-card-outlined p-12 text-center col-span-2">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="md-card-outlined p-12 text-center ml-8 md:ml-28"
+                >
                   <p className="body-large text-md-on-surface-variant">
                     No entries match your filters
                   </p>
-                </div>
+                </motion.div>
               )}
             </div>
           </div>
@@ -121,7 +160,15 @@ const Index = () => {
 
         <main className="flex-1">
           <AnimatePresence mode="wait">
-            {renderContent()}
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              {renderContent()}
+            </motion.div>
           </AnimatePresence>
         </main>
       </div>

@@ -27,6 +27,7 @@ export interface ActionButton {
 }
 
 export interface ChangelogEntry {
+  id: string;
   version: string;
   release_date: string;
   summary: string;
