@@ -22,23 +22,18 @@ const Index = () => {
     document.documentElement.classList.toggle("dark", isDark);
   }, [isDark]);
 
-  // Global keyboard shortcut for search
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         setIsSearchOpen(true);
       }
     };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const versions = useMemo(
-    () => [...new Set(changelogEntries.map((e) => e.version))],
-    []
-  );
+  const versions = useMemo(() => [...new Set(changelogEntries.map((e) => e.version))], []);
 
   const filteredEntries = useMemo(() => {
     return changelogEntries.filter((entry) => {
@@ -48,19 +43,14 @@ const Index = () => {
     });
   }, [selectedVersion, selectedStatus]);
 
-  // Group entries by month
-  const groupedEntries = useMemo(() => {
-    const groups: { [key: string]: typeof filteredEntries } = {};
+  const grouped = useMemo(() => {
+    const g: Record<string, typeof filteredEntries> = {};
     filteredEntries.forEach((entry) => {
-      const date = new Date(entry.release_date);
-      const monthYear = date.toLocaleDateString("en-US", {
-        month: "long",
-        year: "numeric",
-      });
-      if (!groups[monthYear]) groups[monthYear] = [];
-      groups[monthYear].push(entry);
+      const key = new Date(entry.release_date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+      if (!g[key]) g[key] = [];
+      g[key].push(entry);
     });
-    return groups;
+    return g;
   }, [filteredEntries]);
 
   const renderContent = () => {
@@ -74,17 +64,13 @@ const Index = () => {
       case "alerts":
       default:
         return (
-          <div className="max-w-3xl mx-auto py-6 md:py-8 px-4 md:px-6">
-            {/* Hero */}
-            <header className="mb-8">
-              <h2 className="display-small text-md-on-surface mb-2">Changelog</h2>
-              <p className="body-large text-md-on-surface-variant">
-                All the latest updates, improvements, and fixes
-              </p>
+          <div className="w-full max-w-2xl mx-auto py-6 px-4 sm:px-6">
+            <header className="mb-6">
+              <h2 className="title-large sm:headline-small text-md-on-surface mb-1">Changelog</h2>
+              <p className="body-medium text-md-on-surface-variant">Updates, improvements, and fixes</p>
             </header>
 
-            {/* Filters */}
-            <div className="mb-8">
+            <div className="mb-6">
               <FilterChips
                 versions={versions}
                 selectedVersion={selectedVersion}
@@ -94,39 +80,28 @@ const Index = () => {
               />
             </div>
 
-            {/* Update Cards */}
-            {Object.keys(groupedEntries).length > 0 ? (
-              Object.entries(groupedEntries).map(([monthYear, entries], groupIndex) => (
-                <div key={monthYear} className="mb-8">
+            {Object.keys(grouped).length > 0 ? (
+              Object.entries(grouped).map(([month, entries], gi) => (
+                <div key={month} className="mb-6">
                   <motion.h3
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: groupIndex * 0.1 }}
-                    className="headline-small text-md-on-surface mb-4"
+                    transition={{ delay: gi * 0.05 }}
+                    className="title-medium text-md-on-surface-variant mb-3"
                   >
-                    {monthYear}
+                    {month}
                   </motion.h3>
-                  <div className="space-y-4">
-                    {entries.map((entry, index) => (
-                      <TimelineEntry
-                        key={entry.id}
-                        entry={entry}
-                        index={index + groupIndex * 10}
-                      />
+                  <div className="space-y-3">
+                    {entries.map((entry, i) => (
+                      <TimelineEntry key={entry.id} entry={entry} index={i} />
                     ))}
                   </div>
                 </div>
               ))
             ) : (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="md-card-outlined p-12 text-center"
-              >
-                <p className="body-large text-md-on-surface-variant">
-                  No entries match your filters
-                </p>
-              </motion.div>
+              <div className="md-card-outlined p-10 text-center">
+                <p className="body-medium text-md-on-surface-variant">No matching entries</p>
+              </div>
             )}
           </div>
         );
@@ -135,37 +110,29 @@ const Index = () => {
 
   return (
     <div className="app-shell bg-md-surface min-h-screen">
-      {/* Navigation Rail - Desktop */}
       <NavigationRail activeTab={activeTab} onTabChange={setActiveTab} />
-
-      {/* Main content */}
-      <div className="app-main pb-24 md:pb-0">
+      <div className="app-main pb-20 md:pb-0">
         <TopAppBar
           title="Changelog"
           isDark={isDark}
           onToggleTheme={() => setIsDark(!isDark)}
           onSearchClick={() => setIsSearchOpen(true)}
         />
-
         <main className="flex-1">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.15 }}
             >
               {renderContent()}
             </motion.div>
           </AnimatePresence>
         </main>
       </div>
-
-      {/* Bottom Navigation - Mobile */}
       <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
-
-      {/* Search Dialog */}
       <SearchDialog
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
