@@ -133,17 +133,14 @@ export function HomePanel({ onNavigate }: HomePanelProps) {
             </button>
           </div>
 
-          <div className="timeline-container">
-            <div className="timeline-line" />
-            <div className="space-y-0">
-              {latestEntries.map((entry, index) => (
-                <TimelineEntry 
-                  key={entry.id} 
-                  entry={entry} 
-                  index={index} 
-                />
-              ))}
-            </div>
+          <div className="space-y-4">
+            {latestEntries.map((entry, index) => (
+              <TimelineEntry
+                key={entry.id}
+                entry={entry}
+                index={index}
+              />
+            ))}
           </div>
         </motion.div>
       </motion.div>

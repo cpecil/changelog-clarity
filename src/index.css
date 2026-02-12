@@ -11,45 +11,45 @@
 
 @layer base {
   :root {
-    /* M3 Expressive Color Scheme - Teal/Cyan Primary */
-    --md-sys-color-primary: 174 83% 36%;
-    --md-sys-color-on-primary: 174 100% 98%;
-    --md-sys-color-primary-container: 174 76% 88%;
-    --md-sys-color-on-primary-container: 174 100% 10%;
+    /* M3 Expressive Color Scheme - Deep Indigo / Warm Coral */
+    --md-sys-color-primary: 245 58% 51%;
+    --md-sys-color-on-primary: 0 0% 100%;
+    --md-sys-color-primary-container: 250 80% 92%;
+    --md-sys-color-on-primary-container: 245 80% 18%;
     
-    --md-sys-color-secondary: 174 25% 42%;
+    --md-sys-color-secondary: 220 30% 46%;
     --md-sys-color-on-secondary: 0 0% 100%;
-    --md-sys-color-secondary-container: 174 40% 90%;
-    --md-sys-color-on-secondary-container: 174 50% 12%;
+    --md-sys-color-secondary-container: 220 50% 92%;
+    --md-sys-color-on-secondary-container: 220 45% 15%;
     
-    --md-sys-color-tertiary: 280 60% 55%;
+    --md-sys-color-tertiary: 12 80% 58%;
     --md-sys-color-on-tertiary: 0 0% 100%;
-    --md-sys-color-tertiary-container: 280 70% 92%;
-    --md-sys-color-on-tertiary-container: 280 80% 15%;
+    --md-sys-color-tertiary-container: 12 85% 92%;
+    --md-sys-color-on-tertiary-container: 12 90% 16%;
     
     --md-sys-color-error: 0 75% 42%;
     --md-sys-color-on-error: 0 0% 100%;
     --md-sys-color-error-container: 0 100% 92%;
     --md-sys-color-on-error-container: 0 100% 12%;
     
-    --md-sys-color-surface: 180 20% 99%;
-    --md-sys-color-on-surface: 180 10% 10%;
-    --md-sys-color-surface-dim: 180 15% 94%;
-    --md-sys-color-surface-bright: 180 20% 99%;
-    --md-sys-color-surface-variant: 174 20% 92%;
-    --md-sys-color-on-surface-variant: 174 10% 35%;
-    --md-sys-color-surface-container: 174 15% 96%;
-    --md-sys-color-surface-container-high: 174 18% 93%;
-    --md-sys-color-surface-container-highest: 174 20% 90%;
-    --md-sys-color-surface-container-low: 174 12% 97%;
+    --md-sys-color-surface: 240 15% 99%;
+    --md-sys-color-on-surface: 240 10% 10%;
+    --md-sys-color-surface-dim: 240 10% 94%;
+    --md-sys-color-surface-bright: 240 15% 99%;
+    --md-sys-color-surface-variant: 240 15% 93%;
+    --md-sys-color-on-surface-variant: 240 8% 38%;
+    --md-sys-color-surface-container: 240 12% 96%;
+    --md-sys-color-surface-container-high: 240 14% 93%;
+    --md-sys-color-surface-container-highest: 240 16% 90%;
+    --md-sys-color-surface-container-low: 240 10% 97%;
     --md-sys-color-surface-container-lowest: 0 0% 100%;
     
-    --md-sys-color-outline: 174 8% 55%;
-    --md-sys-color-outline-variant: 174 15% 80%;
+    --md-sys-color-outline: 240 6% 55%;
+    --md-sys-color-outline-variant: 240 12% 82%;
     
-    --md-sys-color-inverse-surface: 174 15% 15%;
-    --md-sys-color-inverse-on-surface: 174 10% 95%;
-    --md-sys-color-inverse-primary: 174 70% 75%;
+    --md-sys-color-inverse-surface: 240 15% 15%;
+    --md-sys-color-inverse-on-surface: 240 8% 95%;
+    --md-sys-color-inverse-primary: 245 70% 78%;
     
     --md-sys-color-scrim: 0 0% 0%;
     --md-sys-color-shadow: 0 0% 0%;
@@ -63,8 +63,8 @@
     --md-sys-elevation-level5: 0 4px 4px 0 hsl(0 0% 0% / 0.3), 0 8px 12px 6px hsl(0 0% 0% / 0.15);
     
     /* Status colors - M3 expressive */
-    --status-planned: 45 90% 50%;
-    --status-rolling: 174 83% 36%;
+    --status-planned: 45 85% 50%;
+    --status-rolling: 245 58% 51%;
     --status-complete: 145 63% 42%;
     
     /* M3 Shape tokens */
@@ -127,49 +127,49 @@
   }
 
   .dark {
-    /* M3 Dark Theme */
-    --md-sys-color-primary: 174 70% 75%;
-    --md-sys-color-on-primary: 174 100% 12%;
-    --md-sys-color-primary-container: 174 80% 25%;
-    --md-sys-color-on-primary-container: 174 76% 88%;
+    /* M3 Dark Theme - Deep Indigo / Warm Coral */
+    --md-sys-color-primary: 245 70% 78%;
+    --md-sys-color-on-primary: 245 80% 16%;
+    --md-sys-color-primary-container: 245 65% 28%;
+    --md-sys-color-on-primary-container: 250 80% 92%;
     
-    --md-sys-color-secondary: 174 40% 80%;
-    --md-sys-color-on-secondary: 174 25% 15%;
-    --md-sys-color-secondary-container: 174 30% 28%;
-    --md-sys-color-on-secondary-container: 174 40% 90%;
+    --md-sys-color-secondary: 220 40% 78%;
+    --md-sys-color-on-secondary: 220 30% 16%;
+    --md-sys-color-secondary-container: 220 35% 25%;
+    --md-sys-color-on-secondary-container: 220 50% 92%;
     
-    --md-sys-color-tertiary: 280 70% 80%;
-    --md-sys-color-on-tertiary: 280 60% 18%;
-    --md-sys-color-tertiary-container: 280 55% 30%;
-    --md-sys-color-on-tertiary-container: 280 70% 92%;
+    --md-sys-color-tertiary: 12 80% 78%;
+    --md-sys-color-on-tertiary: 12 70% 18%;
+    --md-sys-color-tertiary-container: 12 60% 28%;
+    --md-sys-color-on-tertiary-container: 12 85% 92%;
     
     --md-sys-color-error: 0 85% 80%;
     --md-sys-color-on-error: 0 100% 18%;
     --md-sys-color-error-container: 0 70% 28%;
     --md-sys-color-on-error-container: 0 100% 92%;
     
-    --md-sys-color-surface: 174 15% 6%;
-    --md-sys-color-on-surface: 174 10% 92%;
-    --md-sys-color-surface-dim: 174 15% 6%;
-    --md-sys-color-surface-bright: 174 12% 22%;
-    --md-sys-color-surface-variant: 174 12% 18%;
-    --md-sys-color-on-surface-variant: 174 12% 72%;
-    --md-sys-color-surface-container: 174 12% 10%;
-    --md-sys-color-surface-container-high: 174 12% 14%;
-    --md-sys-color-surface-container-highest: 174 12% 18%;
-    --md-sys-color-surface-container-low: 174 12% 8%;
-    --md-sys-color-surface-container-lowest: 174 15% 4%;
+    --md-sys-color-surface: 240 15% 7%;
+    --md-sys-color-on-surface: 240 8% 92%;
+    --md-sys-color-surface-dim: 240 15% 7%;
+    --md-sys-color-surface-bright: 240 10% 22%;
+    --md-sys-color-surface-variant: 240 10% 18%;
+    --md-sys-color-on-surface-variant: 240 8% 72%;
+    --md-sys-color-surface-container: 240 12% 10%;
+    --md-sys-color-surface-container-high: 240 12% 14%;
+    --md-sys-color-surface-container-highest: 240 12% 18%;
+    --md-sys-color-surface-container-low: 240 12% 8%;
+    --md-sys-color-surface-container-lowest: 240 15% 5%;
     
-    --md-sys-color-outline: 174 8% 50%;
-    --md-sys-color-outline-variant: 174 12% 28%;
+    --md-sys-color-outline: 240 6% 50%;
+    --md-sys-color-outline-variant: 240 10% 26%;
     
-    --md-sys-color-inverse-surface: 174 10% 92%;
-    --md-sys-color-inverse-on-surface: 174 15% 15%;
-    --md-sys-color-inverse-primary: 174 83% 36%;
+    --md-sys-color-inverse-surface: 240 8% 92%;
+    --md-sys-color-inverse-on-surface: 240 15% 15%;
+    --md-sys-color-inverse-primary: 245 58% 51%;
     
     /* Status colors - Dark mode */
     --status-planned: 45 80% 60%;
-    --status-rolling: 174 70% 65%;
+    --status-rolling: 245 60% 70%;
     --status-complete: 145 55% 55%;
     
     --md-sys-elevation-level1: 0 1px 3px 1px hsl(0 0% 0% / 0.4), 0 1px 2px 0 hsl(0 0% 0% / 0.6);
@@ -859,79 +859,70 @@
     padding: 0 8px;
   }
 
-  /* ===== TIMELINE - Custom component using M3 tokens ===== */
-  .timeline-container {
-    @apply relative;
-    padding-left: 24px;
+  /* ===== M3 UPDATE CARDS - Google Box & Rounded Texture ===== */
+  .md-update-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--md-sys-shape-corner-extra-large);
+    background: hsl(var(--md-sys-color-surface-container-low));
+    border: 1px solid hsl(var(--md-sys-color-outline-variant) / 0.5);
+    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
   }
 
-  @media (min-width: 768px) {
-    .timeline-container {
-      padding-left: 0;
-    }
-  }
-
-  .timeline-line {
+  .md-update-card::before {
+    content: "";
     position: absolute;
-    left: 7px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: hsl(var(--md-sys-color-outline-variant));
+    inset: 0;
+    border-radius: inherit;
+    background: 
+      radial-gradient(ellipse 80% 60% at 20% 10%, hsl(var(--md-sys-color-primary) / 0.04), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, hsl(var(--md-sys-color-tertiary) / 0.03), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .md-update-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .md-update-card:hover {
+    box-shadow: var(--md-sys-elevation-level2);
+    border-color: hsl(var(--md-sys-color-outline-variant));
+  }
+
+  .md-update-card-image {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
   }
 
   @media (min-width: 768px) {
-    .timeline-line {
-      left: 116px;
+    .md-update-card-image {
+      height: 220px;
     }
   }
 
-  .timeline-entry {
-    @apply relative;
-    display: grid;
-    gap: 16px;
-    padding-left: 24px;
+  .md-version-badge {
+    @apply inline-flex items-center px-3 h-6 rounded-m3-small label-medium font-mono;
+    background: hsl(var(--md-sys-color-surface-container-high));
+    color: hsl(var(--md-sys-color-on-surface-variant));
   }
 
-  @media (min-width: 768px) {
-    .timeline-entry {
-      grid-template-columns: 100px 1fr;
-      gap: 32px;
-      padding-left: 0;
-    }
+  .md-content-box {
+    @apply p-4 rounded-m3-large;
+    background: hsl(var(--md-sys-color-surface-container));
+    border: 1px solid hsl(var(--md-sys-color-outline-variant) / 0.3);
   }
 
-  .timeline-dot {
-    position: absolute;
-    left: -24px;
-    top: 4px;
-    width: 12px;
-    height: 12px;
-    border-radius: var(--md-sys-shape-corner-full);
-    background: hsl(var(--md-sys-color-primary));
-    border: 2px solid hsl(var(--md-sys-color-surface));
-  }
-
-  @media (min-width: 768px) {
-    .timeline-dot {
-      left: 111px;
-    }
-  }
-
-  .month-header {
-    @apply py-4;
-    margin-left: 0;
-  }
-
-  @media (min-width: 768px) {
-    .month-header {
-      margin-left: 132px;
-    }
+  .md-media-card {
+    @apply overflow-hidden rounded-m3-medium;
+    border: 1px solid hsl(var(--md-sys-color-outline-variant) / 0.3);
   }
 
   /* ===== CATEGORY BADGES ===== */
   .category-badge {
-    @apply inline-flex items-center px-3 py-1 label-medium rounded-m3-small;
+    @apply inline-flex items-center px-3 py-1 label-medium rounded-m3-full;
   }
 
   .category-badge.feature {
