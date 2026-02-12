@@ -891,18 +891,6 @@
     border-color: hsl(var(--md-sys-color-outline-variant));
   }
 
-  .md-update-card-image {
-    position: relative;
-    height: 180px;
-    overflow: hidden;
-  }
-
-  @media (min-width: 768px) {
-    .md-update-card-image {
-      height: 220px;
-    }
-  }
-
   .md-version-badge {
     @apply inline-flex items-center px-3 h-6 rounded-m3-small label-medium font-mono;
     background: hsl(var(--md-sys-color-surface-container-high));
