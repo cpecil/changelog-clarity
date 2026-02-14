@@ -10,18 +10,37 @@ import { LegalPanel } from "@/components/m3/LegalPanel";
 import { SearchDialog } from "@/components/m3/SearchDialog";
 import { HomePanel } from "@/components/m3/HomePanel";
 import { changelogEntries } from "@/data/changelog-data";
+import { cookies } from "@/lib/cookies";
 
 const Index = () => {
-  const [isDark, setIsDark] = useState(false);
-  const [activeTab, setActiveTab] = useState("home");
-  const [selectedVersion, setSelectedVersion] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("");
+  // Initialize from cookies
+  const [isDark, setIsDark] = useState(() => cookies.getTheme() === 'dark');
+  const [activeTab, setActiveTab] = useState(() => cookies.getActiveTab() || "home");
+  const [selectedVersion, setSelectedVersion] = useState(() => cookies.getFilterVersion());
+  const [selectedStatus, setSelectedStatus] = useState(() => cookies.getFilterStatus());
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+  // Cookie: persist theme
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark);
+    cookies.setTheme(isDark ? 'dark' : 'light');
   }, [isDark]);
 
+  // Cookie: persist active tab
+  useEffect(() => { cookies.setActiveTab(activeTab); }, [activeTab]);
+
+  // Cookie: persist filters
+  useEffect(() => { cookies.setFilterVersion(selectedVersion); }, [selectedVersion]);
+  useEffect(() => { cookies.setFilterStatus(selectedStatus); }, [selectedStatus]);
+
+  // Cookie: track visits & session
+  useEffect(() => {
+    cookies.incrementVisitCount();
+    cookies.setLastVisit();
+    cookies.initSession();
+  }, []);
+
+  // Keyboard shortcut
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
