@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bell, Mail, CheckCircle, Loader2, Rss, AlertCircle } from "lucide-react";
 import { ConnectCard } from "./ConnectCard";
 import { toast } from "sonner";
+import { cookies } from "@/lib/cookies";
 
 export function SubscribePanel() {
-  const [email, setEmail] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  // Check if already subscribed via cookie
+  const savedEmail = cookies.getSubscribed();
+  const [email, setEmail] = useState(savedEmail || "");
+  const [isSubmitted, setIsSubmitted] = useState(!!savedEmail);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -18,6 +21,7 @@ export function SubscribePanel() {
     await new Promise((r) => setTimeout(r, 600));
     setIsSubmitted(true);
     setIsLoading(false);
+    cookies.setSubscribed(email);
     toast.success("Subscribed!", { description: `Updates → ${email}` });
   };
 
