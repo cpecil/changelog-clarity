@@ -9,16 +9,18 @@ import { SubscribePanel } from "@/components/m3/SubscribePanel";
 import { LegalPanel } from "@/components/m3/LegalPanel";
 import { SearchDialog } from "@/components/m3/SearchDialog";
 import { HomePanel } from "@/components/m3/HomePanel";
+import { CookieBanner } from "@/components/m3/CookieBanner";
+import { CookieManagementPage } from "@/components/m3/CookieManagementPage";
 import { changelogEntries } from "@/data/changelog-data";
 import { cookies } from "@/lib/cookies";
 
 const Index = () => {
-  // Initialize from cookies
   const [isDark, setIsDark] = useState(() => cookies.getTheme() === 'dark');
   const [activeTab, setActiveTab] = useState(() => cookies.getActiveTab() || "home");
   const [selectedVersion, setSelectedVersion] = useState(() => cookies.getFilterVersion());
   const [selectedStatus, setSelectedStatus] = useState(() => cookies.getFilterStatus());
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showCookieManagement, setShowCookieManagement] = useState(false);
 
   // Cookie: persist theme
   useEffect(() => {
@@ -72,7 +74,20 @@ const Index = () => {
     return g;
   }, [filteredEntries]);
 
+  // Handle search result selection - navigate to alerts tab
+  const handleSearchSelect = (entry: typeof changelogEntries[0]) => {
+    setActiveTab("alerts");
+    setSelectedVersion("");
+    setSelectedStatus("");
+    cookies.setLastRead(entry.id);
+  };
+
   const renderContent = () => {
+    // Cookie management page overlay
+    if (showCookieManagement) {
+      return <CookieManagementPage onBack={() => setShowCookieManagement(false)} />;
+    }
+
     switch (activeTab) {
       case "home":
         return <HomePanel onNavigate={setActiveTab} />;
@@ -129,7 +144,7 @@ const Index = () => {
 
   return (
     <div className="app-shell bg-md-surface min-h-screen">
-      <NavigationRail activeTab={activeTab} onTabChange={setActiveTab} />
+      <NavigationRail activeTab={activeTab} onTabChange={(tab) => { setShowCookieManagement(false); setActiveTab(tab); }} />
       <div className="app-main pb-20 md:pb-0">
         <TopAppBar
           title="Changelog"
@@ -140,7 +155,7 @@ const Index = () => {
         <main className="flex-1">
           <AnimatePresence mode="wait">
             <motion.div
-              key={activeTab}
+              key={showCookieManagement ? 'cookie-mgmt' : activeTab}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
@@ -151,11 +166,16 @@ const Index = () => {
           </AnimatePresence>
         </main>
       </div>
-      <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+      <BottomNavigation activeTab={activeTab} onTabChange={(tab) => { setShowCookieManagement(false); setActiveTab(tab); }} />
+      
+      {/* Cookie consent banner */}
+      <CookieBanner onManage={() => setShowCookieManagement(true)} />
+      
       <SearchDialog
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         entries={changelogEntries}
+        onSelectEntry={handleSearchSelect}
       />
     </div>
   );
