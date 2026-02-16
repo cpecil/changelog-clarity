@@ -17,12 +17,6 @@ const mainItems: { id: string; label: string; icon: LucideIconType }[] = [
   { id: "notifications", label: "Subscribe", icon: Bell },
 ];
 
-const moreItems: { id: string; label: string; icon: LucideIconType; action?: string }[] = [
-  { id: "legal", label: "Legal", icon: Scale },
-  { id: "share", label: "Share", icon: Share2, action: "share" },
-  { id: "cookies", label: "Cookies", icon: Cookie, action: "cookies" },
-];
-
 export function BottomNavigation({ activeTab, onTabChange, onShareClick, onCookieSettingsClick }: BottomNavigationProps) {
   const [moreOpen, setMoreOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -60,7 +54,7 @@ export function BottomNavigation({ activeTab, onTabChange, onShareClick, onCooki
           );
         })}
 
-        {/* More button */}
+        {/* More */}
         <div className="flex-1 relative" ref={menuRef}>
           <button
             onClick={() => setMoreOpen(!moreOpen)}
@@ -79,32 +73,68 @@ export function BottomNavigation({ activeTab, onTabChange, onShareClick, onCooki
           <AnimatePresence>
             {moreOpen && (
               <motion.div
-                initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                initial={{ opacity: 0, y: 12, scale: 0.92 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 8, scale: 0.95 }}
-                transition={{ duration: 0.15 }}
-                className="absolute bottom-full right-0 mb-2 w-48 rounded-m3-large overflow-hidden z-50"
+                exit={{ opacity: 0, y: 12, scale: 0.92 }}
+                transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+                className="absolute bottom-full right-0 mb-3 min-w-[220px] rounded-[16px] overflow-hidden z-[100]"
                 style={{
                   background: "hsl(var(--md-sys-color-surface-container))",
                   boxShadow: "var(--md-sys-elevation-level2)",
+                  border: "1px solid hsl(var(--md-sys-color-outline-variant) / 0.3)",
                 }}
               >
-                <div className="py-1">
-                  {moreItems.map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        setMoreOpen(false);
-                        if (item.action === "share") onShareClick?.();
-                        else if (item.action === "cookies") onCookieSettingsClick?.();
-                        else onTabChange(item.id);
-                      }}
-                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-md-surface-variant transition-colors"
+                <div className="py-2">
+                  {/* Legal */}
+                  <button
+                    onClick={() => { setMoreOpen(false); onTabChange("legal"); }}
+                    className="w-full flex items-center gap-4 px-4 py-3 transition-colors hover:bg-[hsl(var(--md-sys-color-surface-variant)/0.5)]"
+                  >
+                    <div
+                      className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+                      style={{ background: "hsl(var(--md-sys-color-secondary-container))" }}
                     >
-                      <item.icon size={18} className="text-md-on-surface-variant" />
-                      <span className="label-large text-md-on-surface">{item.label}</span>
-                    </button>
-                  ))}
+                      <Scale size={16} className="text-md-on-secondary-container" />
+                    </div>
+                    <div className="text-left">
+                      <p className="label-large text-md-on-surface">Legal</p>
+                      <p className="body-small text-md-on-surface-variant">Terms & policies</p>
+                    </div>
+                  </button>
+                  <div className="mx-4 h-px" style={{ background: "hsl(var(--md-sys-color-outline-variant) / 0.4)" }} />
+                  {/* Share */}
+                  <button
+                    onClick={() => { setMoreOpen(false); onShareClick?.(); }}
+                    className="w-full flex items-center gap-4 px-4 py-3 transition-colors hover:bg-[hsl(var(--md-sys-color-surface-variant)/0.5)]"
+                  >
+                    <div
+                      className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+                      style={{ background: "hsl(var(--md-sys-color-primary-container))" }}
+                    >
+                      <Share2 size={16} className="text-md-on-primary-container" />
+                    </div>
+                    <div className="text-left">
+                      <p className="label-large text-md-on-surface">Share</p>
+                      <p className="body-small text-md-on-surface-variant">Share this page</p>
+                    </div>
+                  </button>
+                  <div className="mx-4 h-px" style={{ background: "hsl(var(--md-sys-color-outline-variant) / 0.4)" }} />
+                  {/* Cookies */}
+                  <button
+                    onClick={() => { setMoreOpen(false); onCookieSettingsClick?.(); }}
+                    className="w-full flex items-center gap-4 px-4 py-3 transition-colors hover:bg-[hsl(var(--md-sys-color-surface-variant)/0.5)]"
+                  >
+                    <div
+                      className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+                      style={{ background: "hsl(var(--md-sys-color-tertiary-container))" }}
+                    >
+                      <Cookie size={16} className="text-md-on-tertiary-container" />
+                    </div>
+                    <div className="text-left">
+                      <p className="label-large text-md-on-surface">Cookie Settings</p>
+                      <p className="body-small text-md-on-surface-variant">Manage preferences</p>
+                    </div>
+                  </button>
                 </div>
               </motion.div>
             )}

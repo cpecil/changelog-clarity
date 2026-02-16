@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X, Link2, QrCode, Mail, Twitter, Facebook, Linkedin,
-  MessageCircle, Copy, Check, Download, Share2
+  MessageCircle, Copy, Check, Download, Share2, ChevronLeft, ExternalLink
 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 
@@ -25,36 +25,11 @@ export function ShareToolkit({ isOpen, onClose }: ShareToolkitProps) {
   };
 
   const socialLinks = [
-    {
-      id: "twitter",
-      label: "X / Twitter",
-      icon: Twitter,
-      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`,
-    },
-    {
-      id: "facebook",
-      label: "Facebook",
-      icon: Facebook,
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
-    },
-    {
-      id: "linkedin",
-      label: "LinkedIn",
-      icon: Linkedin,
-      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-    },
-    {
-      id: "whatsapp",
-      label: "WhatsApp",
-      icon: MessageCircle,
-      url: `https://wa.me/?text=${encodeURIComponent(shareTitle + " " + shareUrl)}`,
-    },
-    {
-      id: "email",
-      label: "Email",
-      icon: Mail,
-      url: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(shareUrl)}`,
-    },
+    { id: "twitter", label: "X", icon: Twitter, url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}` },
+    { id: "facebook", label: "Facebook", icon: Facebook, url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}` },
+    { id: "linkedin", label: "LinkedIn", icon: Linkedin, url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}` },
+    { id: "whatsapp", label: "WhatsApp", icon: MessageCircle, url: `https://wa.me/?text=${encodeURIComponent(shareTitle + " " + shareUrl)}` },
+    { id: "email", label: "Email", icon: Mail, url: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(shareUrl)}` },
   ];
 
   const downloadQR = () => {
@@ -78,173 +53,185 @@ export function ShareToolkit({ isOpen, onClose }: ShareToolkitProps) {
 
   const nativeShare = async () => {
     if (navigator.share) {
-      try {
-        await navigator.share({ title: shareTitle, url: shareUrl });
-      } catch {}
+      try { await navigator.share({ title: shareTitle, url: shareUrl }); } catch {}
     }
   };
 
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-md-scrim/40"
-            onClick={onClose}
-          />
-          <motion.div
-            initial={{ opacity: 0, y: 60, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 60, scale: 0.95 }}
-            transition={{ type: "spring", damping: 25, stiffness: 350 }}
-            className="fixed z-50 inset-x-4 bottom-4 sm:inset-auto sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-w-sm md-card-filled rounded-m3-extra-large overflow-hidden"
-            style={{ background: "hsl(var(--md-sys-color-surface-container-low))" }}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 pb-2">
-              <h2 className="title-large text-md-on-surface">Share</h2>
-              <button onClick={onClose} className="md-icon-button">
-                <X size={20} />
-              </button>
-            </div>
+  if (!isOpen) return null;
 
-            <AnimatePresence mode="wait">
-              {activeView === "main" ? (
-                <motion.div
-                  key="main"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="px-4 pb-4 space-y-4"
+  return (
+    <>
+      {/* Scrim */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[70]"
+        style={{ background: "hsl(var(--md-sys-color-scrim) / 0.32)" }}
+        onClick={onClose}
+      />
+
+      {/* Bottom sheet on mobile, centered dialog on desktop */}
+      <motion.div
+        initial={{ opacity: 0, y: 80 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 80 }}
+        transition={{ duration: 0.3, ease: [0.05, 0.7, 0.1, 1] }}
+        className="fixed z-[70] inset-x-0 bottom-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-w-[400px]"
+      >
+        <div
+          className="overflow-hidden"
+          style={{
+            background: "hsl(var(--md-sys-color-surface-container-low))",
+            borderRadius: "28px 28px 0 0",
+            boxShadow: "var(--md-sys-elevation-level3)",
+          }}
+          // Desktop: fully rounded
+          {...(typeof window !== "undefined" && window.innerWidth >= 640 ? { style: { background: "hsl(var(--md-sys-color-surface-container-low))", borderRadius: "28px", boxShadow: "var(--md-sys-elevation-level3)" } } : {})}
+        >
+          {/* Drag handle (mobile) */}
+          <div className="flex justify-center pt-3 pb-1 sm:hidden">
+            <div className="w-8 h-1 rounded-full" style={{ background: "hsl(var(--md-sys-color-outline-variant))" }} />
+          </div>
+
+          {/* Header */}
+          <div className="flex items-center gap-3 px-6 py-4">
+            {activeView === "qr" && (
+              <button onClick={() => setActiveView("main")} className="md-icon-button w-10 h-10 -ml-2">
+                <ChevronLeft size={20} className="text-md-on-surface" />
+              </button>
+            )}
+            <h2 className="title-large text-md-on-surface flex-1">
+              {activeView === "main" ? "Share" : "QR Code"}
+            </h2>
+            <button onClick={onClose} className="md-icon-button w-10 h-10 -mr-2">
+              <X size={20} className="text-md-on-surface-variant" />
+            </button>
+          </div>
+
+          <AnimatePresence mode="wait">
+            {activeView === "main" ? (
+              <motion.div
+                key="main"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="px-6 pb-6 space-y-3"
+              >
+                {/* Copy link row - inspired by reference site's list items */}
+                <button
+                  onClick={copyLink}
+                  className="w-full flex items-center gap-4 p-4 rounded-[16px] transition-colors active:scale-[0.98]"
+                  style={{ background: "hsl(var(--md-sys-color-surface-container))" }}
                 >
-                  {/* Copy link */}
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                    style={{ background: "hsl(var(--md-sys-color-primary-container))" }}
+                  >
+                    {copied ? <Check size={18} className="text-md-on-primary-container" /> : <Link2 size={18} className="text-md-on-primary-container" />}
+                  </div>
+                  <div className="flex-1 text-left min-w-0">
+                    <p className="label-large text-md-on-surface">{copied ? "Copied!" : "Copy link"}</p>
+                    <p className="body-small text-md-on-surface-variant truncate">{shareUrl}</p>
+                  </div>
+                  <Copy size={16} className="text-md-on-surface-variant shrink-0" />
+                </button>
+
+                {/* QR Code row */}
+                <button
+                  onClick={() => setActiveView("qr")}
+                  className="w-full flex items-center gap-4 p-4 rounded-[16px] transition-colors active:scale-[0.98]"
+                  style={{ background: "hsl(var(--md-sys-color-surface-container))" }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                    style={{ background: "hsl(var(--md-sys-color-tertiary-container))" }}
+                  >
+                    <QrCode size={18} className="text-md-on-tertiary-container" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <p className="label-large text-md-on-surface">QR Code</p>
+                    <p className="body-small text-md-on-surface-variant">Scan to open</p>
+                  </div>
+                  <ExternalLink size={16} className="text-md-on-surface-variant shrink-0" />
+                </button>
+
+                {/* Native share */}
+                {"share" in navigator && (
                   <button
-                    onClick={copyLink}
-                    className="w-full flex items-center gap-3 p-3 rounded-m3-large transition-colors"
+                    onClick={nativeShare}
+                    className="w-full flex items-center gap-4 p-4 rounded-[16px] transition-colors active:scale-[0.98]"
                     style={{ background: "hsl(var(--md-sys-color-surface-container))" }}
                   >
                     <div
-                      className="w-10 h-10 rounded-m3-full flex items-center justify-center shrink-0"
-                      style={{ background: "hsl(var(--md-sys-color-primary-container))" }}
+                      className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                      style={{ background: "hsl(var(--md-sys-color-secondary-container))" }}
                     >
-                      {copied ? (
-                        <Check size={18} className="text-md-on-primary-container" />
-                      ) : (
-                        <Link2 size={18} className="text-md-on-primary-container" />
-                      )}
+                      <Share2 size={18} className="text-md-on-secondary-container" />
                     </div>
                     <div className="flex-1 text-left">
-                      <p className="label-large text-md-on-surface">
-                        {copied ? "Copied!" : "Copy link"}
-                      </p>
-                      <p className="body-small text-md-on-surface-variant truncate max-w-[200px]">
-                        {shareUrl}
-                      </p>
+                      <p className="label-large text-md-on-surface">More options</p>
+                      <p className="body-small text-md-on-surface-variant">System share sheet</p>
                     </div>
-                    <Copy size={16} className="text-md-on-surface-variant shrink-0" />
                   </button>
+                )}
 
-                  {/* QR Code button */}
-                  <button
-                    onClick={() => setActiveView("qr")}
-                    className="w-full flex items-center gap-3 p-3 rounded-m3-large transition-colors"
-                    style={{ background: "hsl(var(--md-sys-color-surface-container))" }}
-                  >
-                    <div
-                      className="w-10 h-10 rounded-m3-full flex items-center justify-center shrink-0"
-                      style={{ background: "hsl(var(--md-sys-color-tertiary-container))" }}
-                    >
-                      <QrCode size={18} className="text-md-on-tertiary-container" />
-                    </div>
-                    <p className="label-large text-md-on-surface flex-1 text-left">QR Code</p>
-                  </button>
-
-                  {/* Native share (mobile) */}
-                  {"share" in navigator && (
-                    <button
-                      onClick={nativeShare}
-                      className="w-full flex items-center gap-3 p-3 rounded-m3-large transition-colors"
-                      style={{ background: "hsl(var(--md-sys-color-surface-container))" }}
-                    >
-                      <div
-                        className="w-10 h-10 rounded-m3-full flex items-center justify-center shrink-0"
-                        style={{ background: "hsl(var(--md-sys-color-secondary-container))" }}
+                {/* Social row */}
+                <div className="pt-2">
+                  <p className="label-medium text-md-on-surface-variant mb-3 px-1">Share via</p>
+                  <div className="flex justify-between">
+                    {socialLinks.map((s) => (
+                      <a
+                        key={s.id}
+                        href={s.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center gap-1.5 p-2 rounded-[12px] transition-colors hover:bg-[hsl(var(--md-sys-color-surface-variant)/0.5)] active:scale-95"
                       >
-                        <Share2 size={18} className="text-md-on-secondary-container" />
-                      </div>
-                      <p className="label-large text-md-on-surface flex-1 text-left">More options…</p>
-                    </button>
-                  )}
-
-                  {/* Social grid */}
-                  <div>
-                    <p className="label-medium text-md-on-surface-variant mb-2">Social</p>
-                    <div className="flex gap-2 flex-wrap">
-                      {socialLinks.map((s) => (
-                        <a
-                          key={s.id}
-                          href={s.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex flex-col items-center gap-1 p-2 rounded-m3-large min-w-[56px] transition-colors hover:bg-md-surface-variant"
+                        <div
+                          className="w-11 h-11 rounded-full flex items-center justify-center"
+                          style={{ background: "hsl(var(--md-sys-color-surface-container-high))" }}
                         >
-                          <div
-                            className="w-10 h-10 rounded-m3-full flex items-center justify-center"
-                            style={{ background: "hsl(var(--md-sys-color-surface-container-high))" }}
-                          >
-                            <s.icon size={18} className="text-md-on-surface-variant" />
-                          </div>
-                          <span className="label-small text-md-on-surface-variant">{s.label}</span>
-                        </a>
-                      ))}
-                    </div>
+                          <s.icon size={18} className="text-md-on-surface-variant" />
+                        </div>
+                        <span className="label-small text-md-on-surface-variant">{s.label}</span>
+                      </a>
+                    ))}
                   </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="qr"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  className="px-4 pb-4 space-y-4"
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="qr"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="px-6 pb-6 flex flex-col items-center gap-5"
+              >
+                <div
+                  className="p-8 rounded-[28px]"
+                  style={{ background: "hsl(var(--md-sys-color-surface-container-lowest))" }}
                 >
-                  <button
-                    onClick={() => setActiveView("main")}
-                    className="md-text-button"
-                  >
-                    ← Back
-                  </button>
-
-                  <div className="flex flex-col items-center gap-4">
-                    <div
-                      className="p-6 rounded-m3-extra-large"
-                      style={{ background: "hsl(var(--md-sys-color-surface-container-lowest))" }}
-                    >
-                      <QRCodeSVG
-                        id="share-qr-code"
-                        value={shareUrl}
-                        size={200}
-                        bgColor="transparent"
-                        fgColor="hsl(var(--md-sys-color-on-surface))"
-                        level="M"
-                      />
-                    </div>
-                    <p className="body-small text-md-on-surface-variant text-center max-w-[240px]">
-                      Scan this QR code to open the changelog
-                    </p>
-                    <button onClick={downloadQR} className="md-tonal-button">
-                      <Download size={16} /> Download PNG
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+                  <QRCodeSVG
+                    id="share-qr-code"
+                    value={shareUrl}
+                    size={180}
+                    bgColor="transparent"
+                    fgColor="hsl(var(--md-sys-color-on-surface))"
+                    level="M"
+                  />
+                </div>
+                <p className="body-medium text-md-on-surface-variant text-center max-w-[260px]">
+                  Scan this code with your camera to open the changelog
+                </p>
+                <button onClick={downloadQR} className="md-tonal-button">
+                  <Download size={16} /> Save as PNG
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </motion.div>
+    </>
   );
 }
