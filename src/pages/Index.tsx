@@ -11,6 +11,7 @@ import { SearchDialog } from "@/components/m3/SearchDialog";
 import { HomePanel } from "@/components/m3/HomePanel";
 import { CookieBanner } from "@/components/m3/CookieBanner";
 import { CookieManagementPage } from "@/components/m3/CookieManagementPage";
+import { ShareToolkit } from "@/components/m3/ShareToolkit";
 import { changelogEntries } from "@/data/changelog-data";
 import { cookies } from "@/lib/cookies";
 
@@ -21,6 +22,7 @@ const Index = () => {
   const [selectedStatus, setSelectedStatus] = useState(() => cookies.getFilterStatus());
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showCookieManagement, setShowCookieManagement] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   // Cookie: persist theme
   useEffect(() => {
@@ -74,7 +76,6 @@ const Index = () => {
     return g;
   }, [filteredEntries]);
 
-  // Handle search result selection - navigate to alerts tab
   const handleSearchSelect = (entry: typeof changelogEntries[0]) => {
     setActiveTab("alerts");
     setSelectedVersion("");
@@ -82,8 +83,12 @@ const Index = () => {
     cookies.setLastRead(entry.id);
   };
 
+  const handleTabChange = (tab: string) => {
+    setShowCookieManagement(false);
+    setActiveTab(tab);
+  };
+
   const renderContent = () => {
-    // Cookie management page overlay
     if (showCookieManagement) {
       return <CookieManagementPage onBack={() => setShowCookieManagement(false)} />;
     }
@@ -144,7 +149,12 @@ const Index = () => {
 
   return (
     <div className="app-shell bg-md-surface min-h-screen">
-      <NavigationRail activeTab={activeTab} onTabChange={(tab) => { setShowCookieManagement(false); setActiveTab(tab); }} />
+      <NavigationRail
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        onShareClick={() => setIsShareOpen(true)}
+        onCookieSettingsClick={() => setShowCookieManagement(true)}
+      />
       <div className="app-main pb-20 md:pb-0">
         <TopAppBar
           title="Changelog"
@@ -166,10 +176,15 @@ const Index = () => {
           </AnimatePresence>
         </main>
       </div>
-      <BottomNavigation activeTab={activeTab} onTabChange={(tab) => { setShowCookieManagement(false); setActiveTab(tab); }} />
+      <BottomNavigation
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        onShareClick={() => setIsShareOpen(true)}
+        onCookieSettingsClick={() => setShowCookieManagement(true)}
+      />
       
-      {/* Cookie consent banner */}
       <CookieBanner onManage={() => setShowCookieManagement(true)} />
+      <ShareToolkit isOpen={isShareOpen} onClose={() => setIsShareOpen(false)} />
       
       <SearchDialog
         isOpen={isSearchOpen}
