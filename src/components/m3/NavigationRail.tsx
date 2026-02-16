@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Home, AlertCircle, Bell, Scale, Rss, MoreVertical, Share2, Cookie } from "lucide-react";
+import { Home, AlertCircle, Bell, Scale, Rss, ChevronUp, Share2, Cookie } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import type { LucideIcon as LucideIconType } from "lucide-react";
@@ -65,7 +65,7 @@ export function NavigationRail({ activeTab, onTabChange, onShareClick, onCookieS
         })}
       </div>
 
-      {/* More button */}
+      {/* More button at bottom */}
       <div className="relative pb-5 px-3 flex flex-col items-center" ref={menuRef}>
         <button
           onClick={() => setMoreOpen(!moreOpen)}
@@ -73,7 +73,7 @@ export function NavigationRail({ activeTab, onTabChange, onShareClick, onCookieS
           aria-label="More options"
         >
           <div className={cn("md-nav-rail-item-icon", moreOpen && "bg-md-secondary-container")}>
-            <MoreVertical size={18} className="text-md-on-surface-variant" />
+            <ChevronUp size={18} className={cn("transition-all duration-200", moreOpen ? "text-md-on-secondary-container rotate-180" : "text-md-on-surface-variant")} />
           </div>
           <span className="label-small text-md-on-surface-variant">More</span>
         </button>
@@ -81,30 +81,48 @@ export function NavigationRail({ activeTab, onTabChange, onShareClick, onCookieS
         <AnimatePresence>
           {moreOpen && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 8 }}
-              transition={{ duration: 0.15 }}
-              className="absolute bottom-full left-full mb-1 ml-1 w-48 rounded-m3-large overflow-hidden z-50"
+              initial={{ opacity: 0, y: 8, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.92 }}
+              transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+              className="absolute bottom-full left-full ml-2 mb-2 min-w-[200px] rounded-[16px] overflow-hidden z-[100]"
               style={{
                 background: "hsl(var(--md-sys-color-surface-container))",
                 boxShadow: "var(--md-sys-elevation-level2)",
+                border: "1px solid hsl(var(--md-sys-color-outline-variant) / 0.3)",
               }}
             >
-              <div className="py-1">
+              <div className="py-2">
                 <button
                   onClick={() => { setMoreOpen(false); onShareClick?.(); }}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-md-surface-variant transition-colors"
+                  className="w-full flex items-center gap-4 px-4 py-3 transition-colors hover:bg-[hsl(var(--md-sys-color-surface-variant)/0.5)]"
                 >
-                  <Share2 size={18} className="text-md-on-surface-variant" />
-                  <span className="label-large text-md-on-surface">Share</span>
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+                    style={{ background: "hsl(var(--md-sys-color-primary-container))" }}
+                  >
+                    <Share2 size={16} className="text-md-on-primary-container" />
+                  </div>
+                  <div className="text-left">
+                    <p className="label-large text-md-on-surface">Share</p>
+                    <p className="body-small text-md-on-surface-variant">Share this page</p>
+                  </div>
                 </button>
+                <div className="mx-4 h-px" style={{ background: "hsl(var(--md-sys-color-outline-variant) / 0.4)" }} />
                 <button
                   onClick={() => { setMoreOpen(false); onCookieSettingsClick?.(); }}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-md-surface-variant transition-colors"
+                  className="w-full flex items-center gap-4 px-4 py-3 transition-colors hover:bg-[hsl(var(--md-sys-color-surface-variant)/0.5)]"
                 >
-                  <Cookie size={18} className="text-md-on-surface-variant" />
-                  <span className="label-large text-md-on-surface">Cookie Settings</span>
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+                    style={{ background: "hsl(var(--md-sys-color-tertiary-container))" }}
+                  >
+                    <Cookie size={16} className="text-md-on-tertiary-container" />
+                  </div>
+                  <div className="text-left">
+                    <p className="label-large text-md-on-surface">Cookie Settings</p>
+                    <p className="body-small text-md-on-surface-variant">Manage preferences</p>
+                  </div>
                 </button>
               </div>
             </motion.div>
