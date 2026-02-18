@@ -1,0 +1,164 @@
+# Pages CMS Configuration
+# https://github.com/pages-cms/pages-cms
+# This file configures the CMS for managing changelog entries
+
+media:
+  input: public/media
+  output: /media
+
+content:
+  - name: changelog
+    label: Changelog Entries
+    path: src/data/changelog-data.ts
+    type: collection
+    description: Manage changelog entries for the application
+    view:
+      fields: [version, summary, status, category, release_date]
+      primary: summary
+      sort: release_date
+      order: desc
+    fields:
+      - name: id
+        label: ID
+        type: string
+        required: true
+        description: Unique identifier for the entry
+
+      - name: version
+        label: Version
+        type: string
+        required: true
+        description: Semantic version number (e.g., 2.5.0)
+        pattern: '^\d+\.\d+\.\d+$'
+
+      - name: release_date
+        label: Release Date
+        type: date
+        required: true
+        description: Release date in YYYY-MM-DD format
+
+      - name: summary
+        label: Summary
+        type: string
+        required: true
+        description: Short one-line summary of the update
+
+      - name: category
+        label: Category
+        type: select
+        required: true
+        options:
+          - label: Feature
+            value: feature
+          - label: Improvement
+            value: improvement
+          - label: Bug Fix
+            value: bugfix
+          - label: Security
+            value: security
+          - label: Breaking Change
+            value: breaking
+
+      - name: status
+        label: Rollout Status
+        type: select
+        required: true
+        options:
+          - label: Planned
+            value: Planned
+          - label: Rolling Out
+            value: Rolling out
+          - label: Complete
+            value: Complete
+
+      - name: header_image
+        label: Header Image
+        type: image
+        description: Optional hero image for the entry card
+
+      - name: detailed_info
+        label: Detailed Info
+        type: rich-text
+        description: Full markdown content for the entry detail page
+
+      - name: changes
+        label: Changes
+        type: object
+        list: true
+        fields:
+          - name: type
+            label: Change Type
+            type: select
+            required: true
+            options:
+              - label: Added
+                value: Added
+              - label: Improved
+                value: Improved
+              - label: Fixed
+                value: Fixed
+
+          - name: text
+            label: Description
+            type: string
+            required: true
+
+      - name: links
+        label: Links
+        type: object
+        list: true
+        fields:
+          - name: label
+            label: Label
+            type: string
+            required: true
+
+          - name: url
+            label: URL
+            type: string
+            required: true
+
+      - name: media
+        label: Media
+        type: object
+        list: true
+        fields:
+          - name: type
+            label: Media Type
+            type: select
+            required: true
+            options:
+              - label: Image
+                value: image
+              - label: Video
+                value: video
+              - label: Audio
+                value: audio
+
+          - name: url
+            label: URL
+            type: string
+            required: true
+
+          - name: alt
+            label: Alt Text
+            type: string
+
+      - name: actions
+        label: Action Buttons
+        type: object
+        list: true
+        fields:
+          - name: label
+            label: Button Label
+            type: string
+            required: true
+
+          - name: variant
+            label: Style
+            type: select
+            options:
+              - label: Filled
+                value: filled
+              - label: Outlined
+                value: outlined

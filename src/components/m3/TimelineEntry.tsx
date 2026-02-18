@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, ChevronDown, Play, Volume2, Circle, CheckCircle2, Clock, Rocket } from "lucide-react";
 import { ChangelogEntry } from "@/types/changelog";
@@ -33,6 +34,7 @@ const statusColor: Record<string, string> = {
 
 export function TimelineEntry({ entry, index }: TimelineEntryProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const date = new Date(entry.release_date).toLocaleDateString("en-US", {
     month: "short",
@@ -227,6 +229,16 @@ export function TimelineEntry({ entry, index }: TimelineEntryProps) {
                     ))}
                   </div>
                 )}
+
+                {/* View full entry */}
+                <div className="pt-1">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); navigate(`/entry/${entry.id}`); }}
+                    className="md-tonal-button"
+                  >
+                    View Full Details →
+                  </button>
+                </div>
               </div>
             </motion.div>
           )}
