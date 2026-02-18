@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, FileText, ArrowRight, Clock, TrendingUp } from "lucide-react";
 import { ChangelogEntry } from "@/types/changelog";
@@ -42,6 +43,7 @@ const categoryLabel: Record<string, string> = {
 };
 
 export function SearchDialog({ isOpen, onClose, entries, onSelectEntry }: SearchDialogProps) {
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
@@ -89,6 +91,7 @@ export function SearchDialog({ isOpen, onClose, entries, onSelectEntry }: Search
     cookies.setLastRead(entry.id);
     onSelectEntry?.(entry);
     onClose();
+    navigate(`/entry/${entry.id}`);
   };
 
   const handleRecentClick = (q: string) => {
